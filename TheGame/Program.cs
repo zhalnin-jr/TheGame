@@ -65,38 +65,52 @@ public class Army
             Console.WriteLine($"2. Добавить тяжелого юнита (100 поинтов)");
             Console.WriteLine($"0. Вернуться в меню");
 
-            int choice = int.Parse(Console.ReadLine());
-
-            switch (choice)
+            try
             {
-                case 1:
-                    if (points >= 30)
-                    {
-                        LightUnit lightUnit = new LightUnit($"Light-{Units.Count + 1}");
-                        Units.Add(lightUnit);
-                        points -= 30;
-                        Console.WriteLine($"Добавлен легкий юнит. Осталось {points} поинтов.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Недостаточно поинтов для добавления легкого юнита.");
-                    }
-                    break;
-                case 2:
-                    if (points >= 100)
-                    {
-                        HeavyUnit heavyUnit = new HeavyUnit($"Heavy-{Units.Count + 1}");
-                        Units.Add(heavyUnit);
-                        points -= 100;
-                        Console.WriteLine($"Добавлен тяжелый юнит. Осталось {points} поинтов.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Недостаточно поинтов для добавления тяжелого юнита.");
-                    }
-                    break;
-                case 0:
-                    return;
+                int choice = int.Parse(Console.ReadLine());
+
+                switch (choice)
+                {
+                    case 1:
+                        if (points >= 30)
+                        {
+                            LightUnit lightUnit = new LightUnit($"L{Units.Count + 1}");
+                            Units.Add(lightUnit);
+                            points -= 30;
+                            Console.WriteLine($"Добавлен легкий юнит. Осталось {points} поинтов.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Недостаточно поинтов для добавления легкого юнита.");
+                        }
+                        break;
+                    case 2:
+                        if (points >= 100)
+                        {
+                            HeavyUnit heavyUnit = new HeavyUnit($"H{Units.Count + 1}");
+                            Units.Add(heavyUnit);
+                            points -= 100;
+                            Console.WriteLine($"Добавлен тяжелый юнит. Осталось {points} поинтов.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Недостаточно поинтов для добавления тяжелого юнита.");
+                        }
+                        break;
+                    case 0:
+                        return;
+                    default:
+                        Console.WriteLine("Неверный выбор. Пожалуйста, введите 1, 2 или 0.");
+                        break;
+                }
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Ошибка ввода. Введите число.");
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine("Ошибка ввода. Введено слишком большое число.");
             }
         }
     }
@@ -104,74 +118,138 @@ public class Army
     public void DisplayArmy()
     {
         Console.WriteLine($"Армия {Name}:");
-        foreach (var unit in Units)
-        {
-            Console.Write($"[{unit.Name} (HP: {unit.HealthPoints})] ");
-        }
-        Console.WriteLine();
+        string armyRepresentation = string.Join("", Units.Select(unit => unit is LightUnit ? "L" : "H"));
+        Console.WriteLine(armyRepresentation);
     }
 
     public void MakeMove(Army enemyArmy)
     {
-        for (int i = 0; i < Units.Count; i++)
+        if (Units.Count > 0 && enemyArmy.Units.Count > 0)
         {
-            Unit attacker = Units[i];
-            Unit defender = enemyArmy.Units[i];
+            // Атака юнита из левой армии
+            Unit attacker1 = Units[0];
+            Unit defender1 = enemyArmy.Units[0];
 
-            if (attacker.IsAlive() && defender.IsAlive())
+            if (attacker1.IsAlive() && defender1.IsAlive())
             {
-                attacker.Attack(defender);
+                Console.WriteLine($"{attacker1.Name}({(attacker1 is LightUnit ? "л" : "т")}) из {Name} наносит урон, и {defender1.Name}({(defender1 is LightUnit ? "л" : "т")}) из {enemyArmy.Name} получает урон.");
+                attacker1.Attack(defender1);
 
-                if (!defender.IsAlive())
+                if (!defender1.IsAlive())
                 {
-                    Console.WriteLine($"{defender.Name} из {enemyArmy.Name} погиб!");
+                    Console.WriteLine($"{defender1.Name}({(defender1 is LightUnit ? "л" : "т")}) из {enemyArmy.Name} погиб!");
+                    enemyArmy.Units.RemoveAt(0); // Удаляем убитого юнита из армии противника
                 }
+                else
+                {
+                    Console.WriteLine($"{defender1.Name}({(defender1 is LightUnit ? "л" : "т")}) из {enemyArmy.Name} остается с {defender1.HealthPoints} HP.");
+                }
+            }
+
+            // Атака юнита из правой армии
+            if (enemyArmy.Units.Count > 0)
+            {
+                Unit attacker2 = enemyArmy.Units[0];
+                Unit defender2 = Units[0];
+
+                if (attacker2.IsAlive() && defender2.IsAlive())
+                {
+                    Console.WriteLine($"{attacker2.Name}({(attacker2 is LightUnit ? "л" : "т")}) из {enemyArmy.Name} наносит урон, и {defender2.Name}({(defender2 is LightUnit ? "л" : "т")}) из {Name} получает урон.");
+                    attacker2.Attack(defender2);
+
+                    if (!defender2.IsAlive())
+                    {
+                        Console.WriteLine($"{defender2.Name}({(defender2 is LightUnit ? "л" : "т")}) из {Name} погиб!");
+                        Units.RemoveAt(0); // Удаляем убитого юнита из текущей армии
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{defender2.Name}({(defender2 is LightUnit ? "л" : "т")}) из {Name} остается с {defender2.HealthPoints} HP.");
+                    }
+                }
+            }
+
+            // Удаляем убитых юнитов из обеих армий
+            Units.RemoveAll(unit => !unit.IsAlive());
+            enemyArmy.Units.RemoveAll(unit => !unit.IsAlive());
+            if (Units.Count == 0)
+            {
+                Console.WriteLine($"{Name} армия победила!");
+            }
+            else if (enemyArmy.Units.Count == 0)
+            {
+                Console.WriteLine($"{enemyArmy.Name} армия победила!");
             }
         }
     }
+
+
+
+
+
+
+
 
     public bool IsAlive()
     {
         return Units.Any(unit => unit.IsAlive());
     }
+
+    public static void CopyArmyState(Army source, Army destination)
+    {
+        destination.Units.Clear(); // Очищаем армию назначения перед копированием
+
+        foreach (var unit in source.Units)
+        {
+            if (unit is LightUnit)
+            {
+                destination.Units.Add(new LightUnit(unit.Name));
+            }
+            else if (unit is HeavyUnit)
+            {
+                destination.Units.Add(new HeavyUnit(unit.Name));
+            }
+        }
+    }
 }
 
 public class BattleGame
 {
+    private Army initialArmy1;
+    private Army initialArmy2;
+
     public Army Army1 { get; set; }
     public Army Army2 { get; set; }
 
     public BattleGame()
     {
-        Army1 = new Army("Левая армия");
-        Army2 = new Army("Правая армия");
+        initialArmy1 = new Army("Левая армия");
+        initialArmy2 = new Army("Правая армия");
     }
 
-    public void CreateArmies(int army1Points, int army2Points)
+    public void CreateArmies()
     {
-        Console.WriteLine("Выберите армию для создания:");
-        Console.WriteLine("1. Левая армия");
-        Console.WriteLine("2. Правая армия");
-        Console.WriteLine("0. Вернуться в меню");
+        Console.WriteLine("Создание левой армии:");
+        initialArmy1.CreateArmy(450);
 
-        int choice = int.Parse(Console.ReadLine());
+        Console.WriteLine("Создание правой армии:");
+        initialArmy2.CreateArmy(450);
 
-        switch (choice)
-        {
-            case 1:
-                Army1.CreateArmy(army1Points);
-                break;
-            case 2:
-                Army2.CreateArmy(army2Points);
-                break;
-            case 0:
-                // Вернуться в меню
-                return;
-        }
+        // Создаем копии армий для текущего хода
+        Army1 = new Army("Левой армия");
+        Army2 = new Army("Правой армия");
+
+        // Копируем состояние из начальных армий
+        Army.CopyArmyState(initialArmy1, Army1);
+        Army.CopyArmyState(initialArmy2, Army2);
     }
 
     public void PlayUntilEnd()
     {
+        // Перед началом боя копируем состояние из начальных армий
+        Army.CopyArmyState(initialArmy1, Army1);
+        Army.CopyArmyState(initialArmy2, Army2);
+
         while (Army1.IsAlive() && Army2.IsAlive())
         {
             Army1.MakeMove(Army2);
@@ -201,28 +279,36 @@ class Program
             Console.WriteLine("3. Доиграть игру до конца");
             Console.WriteLine("0. Выйти");
 
-            choice = int.Parse(Console.ReadLine());
-
-            switch (choice)
+            try
             {
-                case 1:
-                    Console.Write("Введите количество поинтов для левой армии: ");
-                    int army1Points = int.Parse(Console.ReadLine());
-                    Console.Write("Введите количество поинтов для правой армии: ");
-                    int army2Points = int.Parse(Console.ReadLine());
+                choice = int.Parse(Console.ReadLine());
 
-                    game.CreateArmies(army1Points, army2Points);
-                    break;
-                case 2:
-                    game.Army1.MakeMove(game.Army2);
-                    Console.WriteLine();
-                    game.Army1.DisplayArmy();
-                    Console.WriteLine();
-                    game.Army2.DisplayArmy();
-                    break;
-                case 3:
-                    game.PlayUntilEnd();
-                    break;
+                switch (choice)
+                {
+                    case 1:
+                        game.CreateArmies();
+                        break;
+                    case 2:
+                        game.Army1.MakeMove(game.Army2);
+                        Console.WriteLine();
+                        game.Army1.DisplayArmy();
+                        Console.WriteLine();
+                        game.Army2.DisplayArmy();
+                        break;
+                    case 3:
+                        game.PlayUntilEnd();
+                        break;
+                }
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Ошибка ввода. Введите число.");
+                choice = -1;
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine("Ошибка ввода. Введено слишком большое число.");
+                choice = -1;
             }
 
         } while (choice != 0);
