@@ -37,18 +37,18 @@ public class Unit
 
 public class LightUnit : Unit
 {
-    public LightUnit(string name) : base(name, 100, 30, 10, 0) { }
+    public LightUnit(string name) : base(name, 150, 80, 20, 0) { }
 }
 
 public class HeavyUnit : Unit
 {
-    public HeavyUnit(string name) : base(name, 200, 50, 20, 0) { }
+    public HeavyUnit(string name) : base(name, 200, 40, 60, 0) { }
 }
 
 public class Army
 {
-    private const int LightUnitCost = 30;
-    private const int HeavyUnitCost = 100;
+    private const int LightUnitCost = 40;
+    private const int HeavyUnitCost = 80;
 
     public string Name { get; set; }
     public List<Unit> Units { get; set; }
