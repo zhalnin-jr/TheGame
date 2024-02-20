@@ -211,6 +211,9 @@ public class BattleGame
 {
     private Army initialArmy1;
     private Army initialArmy2;
+    private static BattleGame instance;
+    private static readonly object lockObj = new object();
+
 
     public Army Army1 { get; set; }
     public Army Army2 { get; set; }
@@ -218,10 +221,24 @@ public class BattleGame
     private Army currentAttacker;
     private Army currentDefender;
 
-    public BattleGame()
+    private BattleGame()
     {
         initialArmy1 = new Army("Левая армия");
         initialArmy2 = new Army("Правая армия");
+    }
+    public static BattleGame Instance
+    {
+        get
+        {
+            lock (lockObj)
+            {
+                if (instance == null)
+                {
+                    instance = new BattleGame();
+                }
+                return instance;
+            }
+        }
     }
 
     public void CreateArmies()
@@ -295,7 +312,7 @@ public class BattleGame
     }
     static void Main()
     {
-        BattleGame game = new BattleGame();
+        BattleGame game = BattleGame.Instance;
 
         int choice;
         do
