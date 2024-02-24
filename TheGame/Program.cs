@@ -207,8 +207,10 @@ public class Army
     }
 }
 
+// Singleton - это паттерн проектирования, который гарантирует, что у класса есть только один экземпляр, и предоставляет глобальную точку доступа к этому экземпляру.
 public class BattleGame
 {
+    // Instance - хранит единственный экземпляр класса BattleGame.
     private Army initialArmy1;
     private Army initialArmy2;
     private static BattleGame instance;
@@ -221,11 +223,14 @@ public class BattleGame
     private Army currentAttacker;
     private Army currentDefender;
 
+    // Приватный конструктор, который вызывается только внутри класса, что предотвращает создание экземпляров извне.
     private BattleGame()
     {
         initialArmy1 = new Army("Левая армия");
         initialArmy2 = new Army("Правая армия");
     }
+
+    // Instance - предоставляет глобальную точку доступа к единственному экземпляру класса BattleGame. Если экземпляр не создан, он создается при первом вызове.
     public static BattleGame Instance
     {
         get
