@@ -11,9 +11,12 @@ public class FrontManager
     {
         if (_instance == null)
         {
-            if (_instance == null)
+            // добавить lock и убрать public конструктор
+            {
+                if (_instance == null)
             {
                 _instance = new FrontManager();
+            }
             }
         }
         return _instance;
@@ -255,18 +258,22 @@ public class BattleGame
     }
 
     // Instance - предоставляет глобальную точку доступа к единственному экземпляру класса BattleGame. Если экземпляр не создан, он создается при первом вызове.
-    public static BattleGame Instance
+    public static BattleGame Instance // убрать public конструктор
     {
         get
         {
-            lock (lockObj)
+            if (instance == null)
             {
-                if (instance == null)
+                lock (lockObj)
                 {
-                    instance = new BattleGame();
+                    if (instance == null)
+                    {
+                        instance = new BattleGame();
+                    }
+                    return instance;
                 }
-                return instance;
             }
+            return instance;
         }
     }
 
