@@ -220,9 +220,6 @@ public class BattleGame
     public Army Army1 { get; set; }
     public Army Army2 { get; set; }
 
-    private Army currentAttacker;
-    private Army currentDefender;
-
     // Приватный конструктор, который вызывается только внутри класса, что предотвращает создание экземпляров извне.
     private BattleGame()
     {
