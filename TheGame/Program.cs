@@ -6,23 +6,21 @@ using System.Linq;
 public class FrontManager
 {
     private static FrontManager _instance;
+    private static readonly object lockObj = new object();
 
     public static FrontManager GetInstance()
     {
         if (_instance == null)
         {
-            // добавить lock и убрать public конструктор
+            lock (lockObj)
             {
-                if (_instance == null)
-            {
-                _instance = new FrontManager();
-            }
+                _instance ??= new FrontManager();
             }
         }
         return _instance;
     }
 
-    public FrontManager()
+    private protected FrontManager()
     {
     }
 
@@ -251,7 +249,7 @@ public class BattleGame
     public Army Army2 { get; set; }
 
     // Приватный конструктор, который вызывается только внутри класса, что предотвращает создание экземпляров извне.
-    private BattleGame()
+    private protected BattleGame()
     {
         initialArmy1 = new Army("Левая армия");
         initialArmy2 = new Army("Правая армия");
@@ -266,11 +264,7 @@ public class BattleGame
             {
                 lock (lockObj)
                 {
-                    if (instance == null)
-                    {
-                        instance = new BattleGame();
-                    }
-                    return instance;
+                    instance ??= new BattleGame();
                 }
             }
             return instance;
