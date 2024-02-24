@@ -1,7 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
+public class FrontManager
+{
+    private static FrontManager _instance;
+
+    public static FrontManager GetInstance()
+    {
+        if (_instance == null)
+        {
+            if (_instance == null)
+            {
+                _instance = new FrontManager();
+            }
+        }
+        return _instance;
+    }
+
+    public FrontManager()
+    {
+    }
+
+    public void Printer(string output)
+    {
+        Console.WriteLine(output);
+    }
+
+}
 public class Unit
 {
     public string Name { get; set; }
@@ -26,7 +53,7 @@ public class Unit
         int dodge = (this is LightUnit) ? random.Next(5, 11) : random.Next(0, 6);
         int damage = Math.Max(0, AttackPoints - target.DefensePoints - dodge);
         target.HealthPoints -= damage;
-        Console.WriteLine($"{Name} атакует {target.Name} и наносит {damage} урона.");
+        FrontManager.GetInstance().Printer($"{Name} атакует {target.Name} и наносит {damage} урона.");
     }
 
     public bool IsAlive()
@@ -61,14 +88,14 @@ public class Army
 
     public void CreateArmy(int points)
     {
-        Console.WriteLine($"Создание армии {Name}");
-        Console.WriteLine($"Осталось {points} поинтов.");
+        FrontManager.GetInstance().Printer($"Создание армии {Name}");
+        FrontManager.GetInstance().Printer($"Осталось {points} поинтов.");
 
         while (points > 0)
         {
-            Console.WriteLine($"1. Добавить легкого юнита ({LightUnitCost} поинтов)");
-            Console.WriteLine($"2. Добавить тяжелого юнита ({HeavyUnitCost} поинтов)");
-            Console.WriteLine($"0. Следующее действие");
+            FrontManager.GetInstance().Printer($"1. Добавить легкого юнита ({LightUnitCost} поинтов)");
+            FrontManager.GetInstance().Printer($"2. Добавить тяжелого юнита ({HeavyUnitCost} поинтов)");
+            FrontManager.GetInstance().Printer($"0. Следующее действие");
 
             try
             {
@@ -82,11 +109,11 @@ public class Army
                             LightUnit lightUnit = new LightUnit($"L{Units.Count + 1}");
                             Units.Add(lightUnit);
                             points -= LightUnitCost;
-                            Console.WriteLine($"Добавлен легкий юнит. Осталось {points} поинтов.");
+                            FrontManager.GetInstance().Printer($"Добавлен легкий юнит. Осталось {points} поинтов.");
                         }
                         else
                         {
-                            Console.WriteLine("Недостаточно поинтов для добавления легкого юнита.");
+                            FrontManager.GetInstance().Printer("Недостаточно поинтов для добавления легкого юнита.");
                         }
                         break;
                     case 2:
@@ -95,36 +122,36 @@ public class Army
                             HeavyUnit heavyUnit = new HeavyUnit($"H{Units.Count + 1}");
                             Units.Add(heavyUnit);
                             points -= HeavyUnitCost;
-                            Console.WriteLine($"Добавлен тяжелый юнит. Осталось {points} поинтов.");
+                            FrontManager.GetInstance().Printer($"Добавлен тяжелый юнит. Осталось {points} поинтов.");
                         }
                         else
                         {
-                            Console.WriteLine("Недостаточно поинтов для добавления тяжелого юнита.");
+                            FrontManager.GetInstance().Printer("Недостаточно поинтов для добавления тяжелого юнита.");
                         }
                         break;
                     case 0:
                         return;
                     default:
-                        Console.WriteLine("Неверный выбор. Пожалуйста, введите 1, 2 или 0.");
+                        FrontManager.GetInstance().Printer("Неверный выбор. Пожалуйста, введите 1, 2 или 0.");
                         break;
                 }
             }
             catch (FormatException)
             {
-                Console.WriteLine("Ошибка ввода. Введите число.");
+                FrontManager.GetInstance().Printer("Ошибка ввода. Введите число.");
             }
             catch (OverflowException)
             {
-                Console.WriteLine("Ошибка ввода. Введено слишком большое число.");
+                FrontManager.GetInstance().Printer("Ошибка ввода. Введено слишком большое число.");
             }
         }
     }
 
     public void DisplayArmy()
     {
-        Console.WriteLine($"Армия {Name}:");
+        FrontManager.GetInstance().Printer($"Армия {Name}:");
         string armyRepresentation = string.Join("", Units.Select(unit => unit is LightUnit ? "L" : "H"));
-        Console.WriteLine(armyRepresentation);
+        FrontManager.GetInstance().Printer(armyRepresentation);
     }
 
     public void MakeMove(Army enemyArmy)
@@ -146,12 +173,12 @@ public class Army
                 }
                 else
                 {
-                    Console.WriteLine($"{defender.Name} из {enemyArmy.Name} погиб!");
+                    FrontManager.GetInstance().Printer($"{defender.Name} из {enemyArmy.Name} погиб!");
                 }
 
                 if (!attacker.IsAlive()) // Проверка после контратаки, жив ли атакующий
                 {
-                    Console.WriteLine($"{attacker.Name} из {Name} погиб!");
+                    FrontManager.GetInstance().Printer($"{attacker.Name} из {Name} погиб!");
                 }
             }
         }
@@ -177,11 +204,11 @@ public class Army
             }
             catch (FormatException)
             {
-                Console.WriteLine("Ошибка ввода. Введите число.");
+                FrontManager.GetInstance().Printer("Ошибка ввода. Введите число.");
             }
             catch (OverflowException)
             {
-                Console.WriteLine("Ошибка ввода. Введено слишком большое число.");
+                FrontManager.GetInstance().Printer("Ошибка ввода. Введено слишком большое число.");
             }
         }
     }
@@ -245,10 +272,10 @@ public class BattleGame
 
     public void CreateArmies()
     {
-        Console.WriteLine("Создание левой армии:");
+        FrontManager.GetInstance().Printer("Создание левой армии:");
         initialArmy1.CreateArmy(450);
 
-        Console.WriteLine("Создание правой армии:");
+        FrontManager.GetInstance().Printer("Создание правой армии:");
         initialArmy2.CreateArmy(450);
 
         // Создаем копии армий для текущего хода
@@ -267,14 +294,14 @@ public class BattleGame
             Army1.MakeMove(Army2);
             if (!Army2.IsAlive()) // Проверяем, остались ли живые юниты в армии 2 после хода армии 1
             {
-                Console.WriteLine($"{Army1.Name} победила!");
+                FrontManager.GetInstance().Printer($"{Army1.Name} победила!");
                 return; // Завершаем игру, если армия 2 уничтожена
             }
 
             Army2.MakeMove(Army1);
             if (!Army1.IsAlive()) // Проверяем, остались ли живые юниты в армии 1 после хода армии 2
             {
-                Console.WriteLine($"{Army2.Name} победила!");
+                FrontManager.GetInstance().Printer($"{Army2.Name} победила!");
                 return; // Завершаем игру, если армия 1 уничтожена
             }
         }
@@ -282,15 +309,15 @@ public class BattleGame
         // Если цикл выше прервался без объявления победителя, проверяем, кто выиграл
         if (!Army1.IsAlive() && Army2.IsAlive())
         {
-            Console.WriteLine($"{Army2.Name} победила!");
+            FrontManager.GetInstance().Printer($"{Army2.Name} победила!");
         }
         else if (Army1.IsAlive() && !Army2.IsAlive())
         {
-            Console.WriteLine($"{Army1.Name} победила!");
+            FrontManager.GetInstance().Printer($"{Army1.Name} победила!");
         }
         else
         {
-            Console.WriteLine("Битва окончена ничьей."); // В случае, если обе армии были уничтожены одновременно
+            FrontManager.GetInstance().Printer("Битва окончена ничьей."); // В случае, если обе армии были уничтожены одновременно
         }
     }
 
@@ -304,11 +331,11 @@ public class BattleGame
             }
             catch (FormatException)
             {
-                Console.WriteLine("Ошибка ввода. Введите число.");
+                FrontManager.GetInstance().Printer("Ошибка ввода. Введите число.");
             }
             catch (OverflowException)
             {
-                Console.WriteLine("Ошибка ввода. Введено слишком большое число.");
+                FrontManager.GetInstance().Printer("Ошибка ввода. Введено слишком большое число.");
             }
         }
     }
@@ -319,10 +346,10 @@ public class BattleGame
         int choice;
         do
         {
-            Console.WriteLine("1. Создать армию");
-            Console.WriteLine("2. Сделать ход");
-            Console.WriteLine("3. Доиграть игру до конца");
-            Console.WriteLine("0. Выйти");
+            FrontManager.GetInstance().Printer("1. Создать армию");
+            FrontManager.GetInstance().Printer("2. Сделать ход");
+            FrontManager.GetInstance().Printer("3. Доиграть игру до конца");
+            FrontManager.GetInstance().Printer("0. Выйти");
 
             try
             {
@@ -335,9 +362,9 @@ public class BattleGame
                         break;
                     case 2:
                         game.Army1.MakeMove(game.Army2);
-                        Console.WriteLine();
+                        FrontManager.GetInstance().Printer("");
                         game.Army1.DisplayArmy();
-                        Console.WriteLine();
+                        FrontManager.GetInstance().Printer("");
                         game.Army2.DisplayArmy();
                         break;
                     case 3:
@@ -347,12 +374,12 @@ public class BattleGame
             }
             catch (FormatException)
             {
-                Console.WriteLine("Ошибка ввода. Введите число.");
+                FrontManager.GetInstance().Printer("Ошибка ввода. Введите число.");
                 choice = -1;
             }
             catch (OverflowException)
             {
-                Console.WriteLine("Ошибка ввода. Введено слишком большое число.");
+                FrontManager.GetInstance().Printer("Ошибка ввода. Введено слишком большое число.");
                 choice = -1;
             }
 
