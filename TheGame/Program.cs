@@ -30,6 +30,29 @@ public class FrontManager
     }
 
 }
+public class UnitFactories
+{
+    public interface IUnitFactory
+    {
+        Unit CreateUnit(string name);
+    }
+
+    public class LightUnitFactory : IUnitFactory
+    {
+        public Unit CreateUnit(string name)
+        {
+            return new LightUnit(name);
+        }
+    }
+
+    public class HeavyUnitFactory : IUnitFactory
+    {
+        public Unit CreateUnit(string name)
+        {
+            return new HeavyUnit(name);
+        }
+    }
+}
 public class Unit
 {
     public string Name { get; set; }
@@ -86,12 +109,19 @@ public class Army
         Name = name;
         Units = new List<Unit>();
     }
+    public void AddUnit(UnitFactories.IUnitFactory factory, string name)
+    {
+        var unit = factory.CreateUnit(name);
+        Units.Add(unit);
+        FrontManager.GetInstance().Printer($"{unit.GetType().Name} {name} добавлен в армию {Name}.");
+    }
 
     public void CreateArmy(int points)
     {
-        FrontManager.GetInstance().Printer($"Создание армии {Name}");
-        FrontManager.GetInstance().Printer($"Осталось {points} поинтов.");
+        var lightFactory = new UnitFactories.LightUnitFactory();
+        var heavyFactory = new UnitFactories.HeavyUnitFactory();
 
+        FrontManager.GetInstance().Printer($"Создание армии {Name}");
         while (points > 0)
         {
             FrontManager.GetInstance().Printer($"1. Добавить легкого юнита ({LightUnitCost} поинтов)");
@@ -107,10 +137,9 @@ public class Army
                     case 1:
                         if (CanAddLightUnit(points))
                         {
-                            LightUnit lightUnit = new LightUnit($"L{Units.Count + 1}");
-                            Units.Add(lightUnit);
+                            AddUnit(lightFactory, $"L{Units.Count + 1}");
                             points -= LightUnitCost;
-                            FrontManager.GetInstance().Printer($"Добавлен легкий юнит. Осталось {points} поинтов.");
+                            FrontManager.GetInstance().Printer($"У вас осталось {points} поинтов");
                         }
                         else
                         {
@@ -120,10 +149,9 @@ public class Army
                     case 2:
                         if (CanAddHeavyUnit(points))
                         {
-                            HeavyUnit heavyUnit = new HeavyUnit($"H{Units.Count + 1}");
-                            Units.Add(heavyUnit);
+                            AddUnit(heavyFactory, $"H{Units.Count + 1}");
                             points -= HeavyUnitCost;
-                            FrontManager.GetInstance().Printer($"Добавлен тяжелый юнит. Осталось {points} поинтов.");
+                            FrontManager.GetInstance().Printer($"У вас осталось {points} поинтов");
                         }
                         else
                         {
