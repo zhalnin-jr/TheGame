@@ -35,4 +35,11 @@
             return new MageUnit(name);
         }
     }
+    public class HealerUnitFactory : IUnitFactory
+    {
+        public Unit CreateUnit(string name)
+        {
+            return new HealerUnit(name);
+        }
+    }
 }

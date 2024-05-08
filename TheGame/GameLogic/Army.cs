@@ -10,6 +10,7 @@ public class Army
     private const int HeavyUnitCost = 80;
     private const int MageUnitCost = 150;
     private const int ArcherUnitCost = 100;
+    private const int HealerUnitCost = 50;
     public string Name { get; set; }
     public List<Unit> Units { get; set; }
 
@@ -31,6 +32,7 @@ public class Army
         var heavyFactory = new UnitFactories.HeavyUnitFactory();
         var archerFactory = new UnitFactories.ArcherUnitFactory();
         var magaFactory = new UnitFactories.MageUnitFactory();
+        var healerFactory = new UnitFactories.HealerUnitFactory();
 
         FrontManager.GetInstance().Printer($"Создание армии {Name}");
         while (points > 0)
@@ -39,6 +41,7 @@ public class Army
             FrontManager.GetInstance().Printer($"2. Добавить тяжелого юнита ({HeavyUnitCost} поинтов)");
             FrontManager.GetInstance().Printer($"3. Добавить archer юнита ({ArcherUnitCost} поинтов)");
             FrontManager.GetInstance().Printer($"4. Добавить MAGA юнита ({MageUnitCost} поинтов)");
+            FrontManager.GetInstance().Printer($"5. Добавить Cleric юнита ({HealerUnitCost} поинтов)");
             FrontManager.GetInstance().Printer($"0. Следующее действие");
 
             try
@@ -95,6 +98,18 @@ public class Army
                             FrontManager.GetInstance().Printer("Недостаточно поинтов для добавления лучника.");
                         }
                         break;
+                        case 5:
+                            if (CanAddHealerUnit(points))
+                        {
+                            AddUnit(healerFactory, $"C{Units.Count + 1}");
+                            points -= HealerUnitCost;
+                            FrontManager.GetInstance().Printer($"У вас осталось {points} поинтов");
+                        }
+                        else
+                        {
+                            FrontManager.GetInstance().Printer("Недостаточно поинтов для добавления лучника.");
+                        }
+                        break;
                     case 0:
                         return;
                     default:
@@ -136,6 +151,10 @@ public class Army
             {
                 armyRepresentation += "{M}";
             }
+            else if (unit is HeavyUnit)
+            {
+                armyRepresentation += "{C}";
+            }
         }
         FrontManager.GetInstance().Printer(armyRepresentation);
     }
@@ -169,6 +188,10 @@ public class Army
                 else if (unit is MageUnit mage)
                 {
                     mage.CloneAdjacentLightUnit(mage, currentArmy.Units);
+                }
+                else if (unit is HealerUnit healer)
+                {
+                    healer.HealFirstUnitWithChance(opposingArmy.Units);
                 }
             }
 
@@ -220,6 +243,7 @@ public class Army
     private bool CanAddHeavyUnit(int points) => points >= HeavyUnitCost;
     private bool CanAddArcherUnit(int points) => points >= ArcherUnitCost;
     private bool CanAddMageUnit(int points) => points >= MageUnitCost;
+    private bool CanAddHealerUnit(int points) => points >= HealerUnitCost;
 
 
     public static void CopyArmyState(Army source, Army destination)
@@ -243,6 +267,10 @@ public class Army
             else if (unit is MageUnit)
             {
                 destination.Units.Add(new MageUnit(unit.Name));
+            }
+            else if (unit is MageUnit)
+            {
+                destination.Units.Add(new HealerUnit(unit.Name));
             }
         }
     }

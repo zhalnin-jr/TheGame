@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Unit;
 
-public class ArcherUnit : Unit
+public class ArcherUnit : Unit, IHealableUnit
 {
 
     private static readonly Random random = new Random();
@@ -43,4 +44,8 @@ public class ArcherUnit : Unit
         }
     }
 
+    public void Heal(int amount)
+    {
+        HealthPoints = Math.Min(HealthPoints + amount, base.HealthPoints);
+    }
 }
