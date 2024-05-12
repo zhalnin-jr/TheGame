@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 public class Army
 {
-    private const int LightUnitCost = 40;
-    private const int HeavyUnitCost = 80;
-    private const int MageUnitCost = 150;
-    private const int ArcherUnitCost = 100;
-    private const int HealerUnitCost = 50;
+    private const int LIGHTUNITCOST = 40;
+    private const int HEAVYUNITCOST = 80;
+    private const int MAGEUNITCOST = 150;
+    private const int ARCHERUNITCOST = 100;
+    private const int HEALERUNITCOST = 50;
     public string Name { get; set; }
     public List<Unit> Units { get; set; }
 
@@ -37,16 +37,16 @@ public class Army
         FrontManager.GetInstance().Printer($"Создание армии {Name}");
         while (points > 0)
         {
-            FrontManager.GetInstance().Printer($"1. Добавить легкого юнита ({LightUnitCost} поинтов)");
-            FrontManager.GetInstance().Printer($"2. Добавить тяжелого юнита ({HeavyUnitCost} поинтов)");
-            FrontManager.GetInstance().Printer($"3. Добавить archer юнита ({ArcherUnitCost} поинтов)");
-            FrontManager.GetInstance().Printer($"4. Добавить MAGA юнита ({MageUnitCost} поинтов)");
-            FrontManager.GetInstance().Printer($"5. Добавить Cleric юнита ({HealerUnitCost} поинтов)");
+            FrontManager.GetInstance().Printer($"1. Добавить легкого юнита ({LIGHTUNITCOST} поинтов)");
+            FrontManager.GetInstance().Printer($"2. Добавить тяжелого юнита ({HEAVYUNITCOST} поинтов)");
+            FrontManager.GetInstance().Printer($"3. Добавить archer юнита ({ARCHERUNITCOST} поинтов)");
+            FrontManager.GetInstance().Printer($"4. Добавить MAGA юнита ({MAGEUNITCOST} поинтов)");
+            FrontManager.GetInstance().Printer($"5. Добавить Cleric юнита ({HEALERUNITCOST} поинтов)");
             FrontManager.GetInstance().Printer($"0. Следующее действие");
 
             try
             {
-                int choice = ReadIntegerInput();
+                var choice = ReadIntegerInput();
 
                 switch (choice)
                 {
@@ -54,7 +54,7 @@ public class Army
                         if (CanAddLightUnit(points))
                         {
                             AddUnit(lightFactory, $"L{Units.Count + 1}");
-                            points -= LightUnitCost;
+                            points -= LIGHTUNITCOST;
                             FrontManager.GetInstance().Printer($"У вас осталось {points} поинтов");
                         }
                         else
@@ -66,7 +66,7 @@ public class Army
                         if (CanAddHeavyUnit(points))
                         {
                             AddUnit(heavyFactory, $"H{Units.Count + 1}");
-                            points -= HeavyUnitCost;
+                            points -= HEAVYUNITCOST;
                             FrontManager.GetInstance().Printer($"У вас осталось {points} поинтов");
                         }
                         else
@@ -78,7 +78,7 @@ public class Army
                         if (CanAddArcherUnit(points))
                         {
                             AddUnit(archerFactory, $"A{Units.Count + 1}"); // Используем фабрику для создания лучника и добавляем его в армию с учетом порядкового номера
-                            points -= ArcherUnitCost;
+                            points -= ARCHERUNITCOST;
                             FrontManager.GetInstance().Printer($"У вас осталось {points} поинтов");
                         }
                         else
@@ -90,7 +90,7 @@ public class Army
                         if (CanAddMageUnit(points))
                         {
                             AddUnit(magaFactory, $"M{Units.Count + 1}");
-                            points -= MageUnitCost;
+                            points -= MAGEUNITCOST;
                             FrontManager.GetInstance().Printer($"У вас осталось {points} поинтов");
                         }
                         else
@@ -102,7 +102,7 @@ public class Army
                             if (CanAddHealerUnit(points))
                         {
                             AddUnit(healerFactory, $"C{Units.Count + 1}");
-                            points -= HealerUnitCost;
+                            points -= HEALERUNITCOST;
                             FrontManager.GetInstance().Printer($"У вас осталось {points} поинтов");
                         }
                         else
@@ -168,14 +168,14 @@ public class Army
 
         while (attacker.IsAlive() && defender.IsAlive())
         {
-            // Ход текущей армии
+            // Ход текущей армии.
             foreach (var unit in currentArmy.Units)
             {
                 if (unit.IsAlive() && currentArmy.Units.IndexOf(unit) == 0)
                 {
                     unit.Attack(opposingArmy.Units[0]);
 
-                    // Проверяем, умер ли противник после атаки
+                    // Проверяем, умер ли противник после атаки.
                     if (!opposingArmy.Units[0].IsAlive())
                     {
                         FrontManager.GetInstance().Printer($"Пехотинец {opposingArmy.Units[0].Name} умер.");
@@ -195,11 +195,11 @@ public class Army
                 }
             }
 
-            // Удаление погибших юнитов после хода текущей армии
+            // Удаление погибших юнитов после хода текущей армии.
             currentArmy.Units.RemoveAll(unit => !unit.IsAlive());
             opposingArmy.Units.RemoveAll(unit => !unit.IsAlive());
 
-            // Меняем местами армии
+            // Меняем местами армии.
             var temp = currentArmy;
             currentArmy = opposingArmy;
             opposingArmy = temp;
@@ -239,16 +239,17 @@ public class Army
         }
     }
 
-    private bool CanAddLightUnit(int points) => points >= LightUnitCost;
-    private bool CanAddHeavyUnit(int points) => points >= HeavyUnitCost;
-    private bool CanAddArcherUnit(int points) => points >= ArcherUnitCost;
-    private bool CanAddMageUnit(int points) => points >= MageUnitCost;
-    private bool CanAddHealerUnit(int points) => points >= HealerUnitCost;
+    private bool CanAddLightUnit(int points) => points >= LIGHTUNITCOST;
+    private bool CanAddHeavyUnit(int points) => points >= HEAVYUNITCOST;
+    private bool CanAddArcherUnit(int points) => points >= ARCHERUNITCOST;
+    private bool CanAddMageUnit(int points) => points >= MAGEUNITCOST;
+    private bool CanAddHealerUnit(int points) => points >= HEALERUNITCOST;
 
 
     public static void CopyArmyState(Army source, Army destination)
     {
-        destination.Units.Clear(); // Очищаем армию назначения перед копированием
+        // Очищаем армию назначения перед копированием.
+        destination.Units.Clear();
 
         foreach (var unit in source.Units)
         {

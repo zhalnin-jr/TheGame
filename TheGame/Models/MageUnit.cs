@@ -6,6 +6,7 @@
         {
             int mageIndex = units.IndexOf(mage);
             Unit unitToClone = null;
+
             if (mageIndex > 0 && units[mageIndex - 1] is LightUnit leftUnit)
             {
                 unitToClone = leftUnit;

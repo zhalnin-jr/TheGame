@@ -16,7 +16,6 @@
         void Heal(int amount);
     }
 
-
     public Unit(string name, int healthPoints, int attackPoints, int defensePoints, int dodgeChance)
     {
         Name = name;

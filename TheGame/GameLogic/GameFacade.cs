@@ -9,13 +9,13 @@ public class GameFacade
     private static GameFacade instance;
     private BattleGame game;
 
-    // Приватный конструктор для Singleton
+    // Приватный конструктор для Singleton.
     private GameFacade()
     {
         game = BattleGame.Instance;
     }
 
-    // Метод для получения экземпляра GameFacade (реализация Singleton)
+    // Метод для получения экземпляра GameFacade (реализация Singleton).
     public static GameFacade GetInstance()
     {
         if (instance == null)
@@ -25,7 +25,7 @@ public class GameFacade
         return instance;
     }
 
-    // Методы для управления игрой
+    // Методы для управления игрой.
     public void CreateArmies()
     {
         game.CreateArmies();

@@ -1,4 +1,5 @@
-﻿// Singleton - это паттерн проектирования, который гарантирует, что у класса есть только один экземпляр, и предоставляет глобальную точку доступа к этому экземпляру.
+﻿// Singleton - это паттерн проектирования, который гарантирует, что у класса есть только один экземпляр
+// и предоставляет глобальную точку доступа к этому экземпляру.
 public class BattleGame
 {
     // Instance - хранит единственный экземпляр класса BattleGame.
@@ -18,7 +19,8 @@ public class BattleGame
         initialArmy2 = new Army("Правая армия");
     }
 
-    // Instance - предоставляет глобальную точку доступа к единственному экземпляру класса BattleGame. Если экземпляр не создан, он создается при первом вызове.
+    // Instance - предоставляет глобальную точку доступа к единственному экземпляру класса BattleGame. Если экземпляр не создан
+    // он создается при первом вызове.
     public static BattleGame Instance // убрать public конструктор
     {
         get
@@ -42,11 +44,11 @@ public class BattleGame
         FrontManager.GetInstance().Printer("Создание правой армии:");
         initialArmy2.CreateArmy(450);
 
-        // Создаем копии армий для текущего хода
+        // Создаем копии армий для текущего хода.
         Army1 = new Army("Левой армии");
         Army2 = new Army("Правой армии");
 
-        // Копируем состояние из начальных армий
+        // Копируем состояние из начальных армий.
         Army.CopyArmyState(initialArmy1, Army1);
         Army.CopyArmyState(initialArmy2, Army2);
     }
@@ -56,21 +58,24 @@ public class BattleGame
         while (Army1.IsAlive() && Army2.IsAlive())
         {
             Army1.MakeMove(Army2);
-            if (!Army2.IsAlive()) // Проверяем, остались ли живые юниты в армии 2 после хода армии 1
+            // Проверяем, остались ли живые юниты в армии 2 после хода армии 1.
+            if (!Army2.IsAlive())
             {
                 FrontManager.GetInstance().Printer($"{Army1.Name} победила!");
                 return; // Завершаем игру, если армия 2 уничтожена
             }
 
             Army2.MakeMove(Army1);
-            if (!Army1.IsAlive()) // Проверяем, остались ли живые юниты в армии 1 после хода армии 2
+            // Проверяем, остались ли живые юниты в армии 1 после хода армии 2.
+            if (!Army1.IsAlive())
             {
                 FrontManager.GetInstance().Printer($"{Army2.Name} победила!");
-                return; // Завершаем игру, если армия 1 уничтожена
+                // Завершаем игру, если армия 1 уничтожена.
+                return;
             }
         }
 
-        // Если цикл выше прервался без объявления победителя, проверяем, кто выиграл
+        // Если цикл выше прервался без объявления победителя, проверяем, кто выиграл.
         if (!Army1.IsAlive() && Army2.IsAlive())
         {
             FrontManager.GetInstance().Printer($"{Army2.Name} победила!");
@@ -79,9 +84,10 @@ public class BattleGame
         {
             FrontManager.GetInstance().Printer($"{Army1.Name} победила!");
         }
+        // В случае, если обе армии были уничтожены одновременно.
         else
         {
-            FrontManager.GetInstance().Printer("Битва окончена ничьей."); // В случае, если обе армии были уничтожены одновременно
+            FrontManager.GetInstance().Printer("Битва окончена ничьей.");
         }
     }
 
