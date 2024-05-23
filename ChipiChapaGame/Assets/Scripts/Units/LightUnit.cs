@@ -1,7 +1,7 @@
 ﻿using static Unit;
 public class LightUnit : Unit, ICloneableUnit, IHealableUnit
 {
-    public LightUnit(string name) : base(name, 150, 80, 20, 10) { }
+    public LightUnit(string name) : base(name, 150, 80, 20, 10, PhysicalUnitManager.Instance.GetPhysicalUnit(Unit.UnitType.Light)) { }
 
     public Unit Clone()
     {

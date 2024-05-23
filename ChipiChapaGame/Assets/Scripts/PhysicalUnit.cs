@@ -8,7 +8,7 @@ public class PhysicalUnit : MonoBehaviour
 
     public void PlayAttack()
     {
-
+        _animator.SetTrigger("Attack");
     }
 
     public void Die()

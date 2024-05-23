@@ -20,7 +20,7 @@ public class ArcherUnit : Unit, IHealableUnit
     // Сохраняет нанесенный урон.
     public int LastDamage { get; private set; }
 
-    public ArcherUnit(string name) : base(name, 90, 70, 25, 5)
+    public ArcherUnit(string name) : base(name, 90, 70, 25, 5, PhysicalUnitManager.Instance.GetPhysicalUnit(Unit.UnitType.Light))
     {
         Range = 3;
         RangeDamage = 30;
