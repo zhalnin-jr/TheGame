@@ -9,8 +9,8 @@ public class FrontManager: MonoBehaviour
     private static readonly object lockObj = new object();
 
     // Новое
-    [SerializeField] private TMP_InputField inputField;
-    [SerializeField] private Transform menuParent;
+    [SerializeField] private Transform menuCenterParent;
+    [SerializeField] private Transform menuBottomParent;
     [SerializeField] private GameObject menuHeader;
     [SerializeField] private GameObject buttonMenu;
 
@@ -56,45 +56,33 @@ public class FrontManager: MonoBehaviour
         //Console.WriteLine(output);
     }
 
-    public bool ReadIntegerInput(out int inputInt)
-    {
-        while (true)
-        {
-            string inputText = inputField.text;
-            int inputValue;
-
-            if (int.TryParse(inputText, out inputValue))
-            {
-                inputInt = inputValue;
-                return true;
-            }
-            else
-            {
-                inputInt = -1;
-                return false;
-            }
-        }
-    }
-
-    public void AddMenuBlock(string _buttonText, Action _onClick = null)
+    public void AddMenuBlock(string _buttonText, Action _onClick = null, bool bottom = false)
     {
         GameObject newBlock;
+
+        Transform newParent = menuCenterParent;
+        if (bottom) newParent = menuBottomParent;
+
         if (_onClick != null)
         {
-            newBlock = Instantiate(buttonMenu, menuParent);
+            newBlock = Instantiate(buttonMenu, newParent);
             newBlock.GetComponent<Button>().onClick.AddListener(() => _onClick.Invoke());
         }
         else 
         {
-            newBlock = Instantiate(menuHeader, menuParent);
+            newBlock = Instantiate(menuHeader, newParent);
         }
         newBlock.GetComponentInChildren<TMP_Text>().text = _buttonText;
     }
+
     public void ClearMenuBlocks()
     {
-        foreach (Transform child in menuParent.transform)
+        foreach (Transform child in menuCenterParent.transform)
         {
-            // Уничтожаем каждый дочерний объект
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in menuBottomParent.transform)
+        {
             Destroy(child.gameObject);
         }
     }

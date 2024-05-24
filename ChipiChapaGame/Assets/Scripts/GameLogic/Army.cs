@@ -87,13 +87,14 @@ public class Army
         FrontManager.Instance.ClearMenuBlocks();
         if (points >= 40)
         {
+            FrontManager.Instance.AddMenuBlock($"У вас осталось {points} поинтов", null, true);
             FrontManager.Instance.AddMenuBlock($"Создание армии {Name}");
-            if (CanAddLightUnit()) FrontManager.Instance.AddMenuBlock($"1. Добавить легкого юнита ({LIGHTUNITCOST} поинтов)", AddLightUnit);
-            if (CanAddHeavyUnit()) FrontManager.Instance.AddMenuBlock($"2. Добавить тяжелого юнита ({HEAVYUNITCOST} поинтов)", AddHeavyUnit);
-            if (CanAddArcherUnit()) FrontManager.Instance.AddMenuBlock($"3. Добавить archer юнита ({ARCHERUNITCOST} поинтов)", AddArcherUnit);
-            if (CanAddMageUnit()) FrontManager.Instance.AddMenuBlock($"4. Добавить MAGA юнита ({MAGEUNITCOST} поинтов)", AddMageUnit);
-            if (CanAddHealerUnit()) FrontManager.Instance.AddMenuBlock($"5. Добавить Cleric юнита ({HEALERUNITCOST} поинтов)", AddHealerUnit);
-            FrontManager.Instance.AddMenuBlock($"0. Следующее действие", FinishCreation);
+            if (CanAddLightUnit()) FrontManager.Instance.AddMenuBlock($"[+] Добавить легкого юнита ({LIGHTUNITCOST} поинтов)", AddLightUnit);
+            if (CanAddHeavyUnit()) FrontManager.Instance.AddMenuBlock($"[+] Добавить тяжелого юнита ({HEAVYUNITCOST} поинтов)", AddHeavyUnit);
+            if (CanAddArcherUnit()) FrontManager.Instance.AddMenuBlock($"[+] Добавить archer юнита ({ARCHERUNITCOST} поинтов)", AddArcherUnit);
+            if (CanAddMageUnit()) FrontManager.Instance.AddMenuBlock($"[+] Добавить MAGA юнита ({MAGEUNITCOST} поинтов)", AddMageUnit);
+            if (CanAddHealerUnit()) FrontManager.Instance.AddMenuBlock($"[+] Добавить Cleric юнита ({HEALERUNITCOST} поинтов)", AddHealerUnit);
+            if (Units.Count() > 0) FrontManager.Instance.AddMenuBlock($">> Следующее действие", FinishCreation);
         }
         else
         {
@@ -152,6 +153,7 @@ public class Army
                     if (!opposingArmy.Units[0].IsAlive())
                     {
                         FrontManager.Instance.Printer($"Пехотинец {opposingArmy.Units[0].Name} умер.");
+                        break;
                     }
                 }
                 else if (unit is ArcherUnit archer)
@@ -242,10 +244,11 @@ public class Army
             {
                 destination.Units.Add(new MageUnit(unit.Name));
             }
-            else if (unit is MageUnit)
+            else if (unit is HealerUnit)
             {
                 destination.Units.Add(new HealerUnit(unit.Name));
             }
+            unit.DestroyPhysicalUnit();
         }
     }
 }

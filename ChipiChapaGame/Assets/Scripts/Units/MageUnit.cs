@@ -2,7 +2,7 @@
 
 public class MageUnit : Unit
     {
-    public MageUnit(string name) : base(name, 60, 30, 20, 5, PhysicalUnitManager.Instance.GetPhysicalUnit(Unit.UnitType.Light)) { }
+    public MageUnit(string name) : base(name, 60, 30, 20, 5) { }
 
     public void CloneAdjacentLightUnit(MageUnit mage, List<Unit> units)
         {

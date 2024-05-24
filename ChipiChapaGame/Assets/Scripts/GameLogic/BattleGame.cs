@@ -41,12 +41,14 @@ public class BattleGame
 
     public void StartArmiesCreation()
     {
+        PhysicalUnitManager.Instance.currentArmyID = 0;
         FrontManager.Instance.Printer("Создание левой армии:");
         initialArmy1.CreateArmy(450, CreateSecondArmy);
     }
 
     public void CreateSecondArmy()
     {
+        PhysicalUnitManager.Instance.currentArmyID = 1;
         FrontManager.Instance.Printer("Создание правой армии:");
         initialArmy2.CreateArmy(450, FinishArmiesCreation);
     }
@@ -58,8 +60,11 @@ public class BattleGame
         Army1 = new Army("Левой армии");
         Army2 = new Army("Правой армии");
         // Копируем состояние из начальных армий.
+        PhysicalUnitManager.Instance.currentArmyID = 0;
         Army.CopyArmyState(initialArmy1, Army1);
+        PhysicalUnitManager.Instance.currentArmyID = 1;
         Army.CopyArmyState(initialArmy2, Army2);
+        GameManager.Instance.ShowFacadeMenu();
     }
 
     public void PlayUntilEnd()

@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 public class GameFacade
 {
     private static GameFacade instance;
-    private BattleGame game;
+    private static readonly object lockObject = new object();
+    private readonly BattleGame game;
 
     // Приватный конструктор для Singleton.
     private GameFacade()
@@ -20,7 +21,10 @@ public class GameFacade
     {
         if (instance == null)
         {
-            instance = new GameFacade();
+            lock (lockObject)
+            {
+                instance ??= new GameFacade();
+            }
         }
         return instance;
     }
@@ -43,5 +47,28 @@ public class GameFacade
         game.Army1.DisplayArmy();
         FrontManager.Instance.Printer("");
         game.Army2.DisplayArmy();
+    }
+
+    public GameState GetGameState()
+    {
+        if (game.Army2 == null)
+        {
+            return GameState.ArmiesDoesntExist;
+        }
+        else if (game.Army1.IsAlive() && game.Army2.IsAlive())
+        {
+            return GameState.CanMakeMove;
+        }
+        else
+        {
+            return GameState.GameFinished;
+        }
+    }
+
+    public enum GameState
+    { 
+        ArmiesDoesntExist,
+        CanMakeMove,
+        GameFinished
     }
 }

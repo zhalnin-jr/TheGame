@@ -6,10 +6,13 @@ using UnityEngine;
 public class PhysicalUnitManager : MonoBehaviour
 {
     [SerializeField] private PhysicalUnit lightUnitPrefab;
+    [SerializeField] private Transform armyParent1;
+    [SerializeField] private Transform armyParent2;
     private static PhysicalUnitManager _instance;
 
     private static readonly object lockObj = new object();
 
+    public int currentArmyID = 0;
 
     public static PhysicalUnitManager Instance
     {
@@ -42,12 +45,19 @@ public class PhysicalUnitManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public PhysicalUnit GetPhysicalUnit(Unit.UnitType type)
+    public PhysicalUnit GetPhysicalUnit(Unit target)
     {
-        if (type == Unit.UnitType.Light)
+        PhysicalUnit newPrefab;
+        if (target is LightUnit)
         {
-            return Instantiate(lightUnitPrefab);
+            newPrefab = lightUnitPrefab;
         }
-        return Instantiate(lightUnitPrefab);
+        else
+        {
+            newPrefab = lightUnitPrefab;
+        }
+
+        if (currentArmyID == 0) return Instantiate(newPrefab, armyParent1);
+        else return Instantiate(newPrefab, armyParent2);
     }
 }
