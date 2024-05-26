@@ -153,6 +153,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lightUnitPrefab: {fileID: 7473009840804255780, guid: a39eba5dc224af14ebf5783afb1e05ac, type: 3}
+  healerUnitPrefab: {fileID: 7473009840804255780, guid: 77536c5e73d22f240b1dccbba643d02d, type: 3}
+  heavyUnitPrefab: {fileID: 7473009840804255780, guid: 41fb91e7803eb7f43a8b50757d8be286, type: 3}
+  mageUnitPrefab: {fileID: 7473009840804255780, guid: f9acbb90146aa9a43a831dc68d9cc66a, type: 3}
+  archerUnitPrefab: {fileID: 7473009840804255780, guid: ca47001840767dd4cbb80bef7f680faf, type: 3}
   armyParent1: {fileID: 538619286}
   armyParent2: {fileID: 905852448}
   currentArmyID: 0

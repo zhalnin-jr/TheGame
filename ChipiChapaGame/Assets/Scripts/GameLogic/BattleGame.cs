@@ -94,10 +94,12 @@ public class BattleGame
         if (!Army1.IsAlive() && Army2.IsAlive())
         {
             FrontManager.Instance.Printer($"{Army2.Name} победила!");
+            GameManager.Instance.ShowNewGameMenu(Army2.Name);
         }
         else if (Army1.IsAlive() && !Army2.IsAlive())
         {
             FrontManager.Instance.Printer($"{Army1.Name} победила!");
+            GameManager.Instance.ShowNewGameMenu(Army1.Name);
         }
         // В случае, если обе армии были уничтожены одновременно.
         else
@@ -106,5 +108,11 @@ public class BattleGame
         }
     }
 
-    
+    public void ClearArmies()
+    {
+        Army1 = null;
+        Army2 = null;
+        initialArmy1.Units.Clear();
+        initialArmy2.Units.Clear();
+    }
 }

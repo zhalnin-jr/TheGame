@@ -31,6 +31,10 @@ public class Unit
         int dodge = random.Next(1, DodgeChance);
         int damage = Math.Max(0, AttackPoints - target.DefensePoints - dodge);
         target.HealthPoints -= damage;
+        if (!target.IsAlive())
+        {
+            target.DestroyPhysicalUnit();
+        }
         FrontManager.Instance.Printer($"{Name} атакует {target.Name} и наносит {damage} урона.");
     }
 

@@ -6,8 +6,14 @@ using UnityEngine;
 public class PhysicalUnitManager : MonoBehaviour
 {
     [SerializeField] private PhysicalUnit lightUnitPrefab;
+    [SerializeField] private PhysicalUnit healerUnitPrefab;
+    [SerializeField] private PhysicalUnit heavyUnitPrefab;
+    [SerializeField] private PhysicalUnit mageUnitPrefab;
+    [SerializeField] private PhysicalUnit archerUnitPrefab;
+
     [SerializeField] private Transform armyParent1;
     [SerializeField] private Transform armyParent2;
+
     private static PhysicalUnitManager _instance;
 
     private static readonly object lockObj = new object();
@@ -52,12 +58,37 @@ public class PhysicalUnitManager : MonoBehaviour
         {
             newPrefab = lightUnitPrefab;
         }
-        else
+        else if (target is HeavyUnit)
         {
-            newPrefab = lightUnitPrefab;
+            newPrefab = heavyUnitPrefab;
         }
+        else if (target is ArcherUnit)
+        {
+            newPrefab = archerUnitPrefab;
+        }
+        else if (target is HealerUnit)
+        {
+            newPrefab = healerUnitPrefab;
+        }
+        else 
+        {
+            newPrefab = mageUnitPrefab;
+        }
+
 
         if (currentArmyID == 0) return Instantiate(newPrefab, armyParent1);
         else return Instantiate(newPrefab, armyParent2);
+    }
+
+    public void ClearAllPhysicalUnits()
+    {
+        foreach (Transform child in armyParent1.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in armyParent2.transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 }

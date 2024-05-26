@@ -62,7 +62,19 @@ public class GameManager: MonoBehaviour
         {
             frontManager.AddMenuBlock($"Сделать ход", gameFacade.MakeMove, true);
             frontManager.AddMenuBlock($"Доиграть до конца", gameFacade.PlayUntilEnd, true);
+            frontManager.AddMenuBlock($"В главное меню", gameFacade.StartNewGame, true);
         }
-        frontManager.AddMenuBlock($"Выйти", Application.Quit, true);
+        if (gameFacade.GetGameState() == GameFacade.GameState.ArmiesDoesntExist)
+        {
+            frontManager.AddMenuBlock($"Выйти", Application.Quit, true);
+        }
+
+    }
+
+    public void ShowNewGameMenu(string armyName)
+    {
+        frontManager.ClearMenuBlocks();
+        frontManager.AddMenuBlock($"Армия {armyName} победила", null, true);
+        frontManager.AddMenuBlock($"Новая игра", gameFacade.StartNewGame);
     }
 }

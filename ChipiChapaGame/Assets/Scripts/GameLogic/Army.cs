@@ -191,35 +191,18 @@ public class Army
         if (!currentArmy.IsAlive())
         {
             FrontManager.Instance.Printer($"{opposingArmy.Name} победила!");
+            GameManager.Instance.ShowNewGameMenu(opposingArmy.Name);
         }
         else if (!opposingArmy.IsAlive())
         {
             FrontManager.Instance.Printer($"{currentArmy.Name} победила!");
+            GameManager.Instance.ShowNewGameMenu(currentArmy.Name);
         }
     }
 
     public bool IsAlive()
     {
         return Units.Any(unit => unit.IsAlive());
-    }
-
-    private static int ReadIntegerInput()
-    {
-        while (true)
-        {
-            try
-            {
-                return int.Parse(Console.ReadLine());
-            }
-            catch (FormatException)
-            {
-                FrontManager.Instance.Printer("Ошибка ввода. Введите число.");
-            }
-            catch (OverflowException)
-            {
-                FrontManager.Instance.Printer("Ошибка ввода. Введено слишком большое число.");
-            }
-        }
     }
 
     private bool CanAddLightUnit() { return points >= LIGHTUNITCOST; }

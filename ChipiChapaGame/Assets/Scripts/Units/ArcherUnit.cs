@@ -46,6 +46,10 @@ public class ArcherUnit : Unit, IHealableUnit
             Unit target = enemyUnits[targetPosition];
             int damage = Math.Max(0, RangeDamage - target.DefensePoints);
             target.HealthPoints -= damage;
+            if (!target.IsAlive())
+            {
+                target.DestroyPhysicalUnit();
+            }
             FrontManager.Instance.Printer($"{Name} атакует {target.Name} с расстояния и наносит {damage} урона.");
         }
     }

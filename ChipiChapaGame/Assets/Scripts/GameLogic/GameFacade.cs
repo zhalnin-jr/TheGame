@@ -49,6 +49,13 @@ public class GameFacade
         game.Army2.DisplayArmy();
     }
 
+    public void StartNewGame()
+    {
+        game.ClearArmies();
+        PhysicalUnitManager.Instance.ClearAllPhysicalUnits();
+        GameManager.Instance.ShowFacadeMenu();
+    }
+
     public GameState GetGameState()
     {
         if (game.Army2 == null)
