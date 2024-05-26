@@ -14,11 +14,8 @@ internal class HealerUnit : Unit
         int chance = random.Next(1, 101);
 
         // Проверяем, выпала ли у нас удача с шансом 25%.
-        if (chance <= 25)
+        if (chance <= 50)
         {
-            // Проверяем, есть ли в армии юниты.
-            if (units.Count > 0)
-            {
                 // Получаем первого юнита из списка.
                 Unit firstUnit = units[0];
 
@@ -34,8 +31,6 @@ internal class HealerUnit : Unit
                 {
                     FrontManager.Instance.Printer($"Юнит {firstUnit.Name} не может быть исцелен.");
                 }
-            }
         }
     }
-
 }

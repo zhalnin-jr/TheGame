@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine.UI;
 using static UnitFactories;
 
 public class Army
@@ -137,6 +138,12 @@ public class Army
     {
         Army currentArmy = this;
         Army opposingArmy = enemyArmy;
+        if (currentArmy.Units.Count == 0 || opposingArmy.Units.Count == 0)
+        {
+            FrontManager.Instance.Printer($"{(currentArmy.Units.Count == 0 ? currentArmy.Name : opposingArmy.Name)} проиграла, так как не осталось юнитов для боя.");
+            return;
+        }
+        
         Unit attacker = Units[0];
         Unit defender = enemyArmy.Units[0];
 
@@ -145,6 +152,7 @@ public class Army
             // Ход текущей армии.
             foreach (var unit in currentArmy.Units)
             {
+                FrontManager.Instance.Printer($"{unit.HealthPoints}");
                 if (unit.IsAlive() && currentArmy.Units.IndexOf(unit) == 0)
                 {
                     unit.Attack(opposingArmy.Units[0]);
@@ -166,7 +174,7 @@ public class Army
                 }
                 else if (unit is HealerUnit healer)
                 {
-                    healer.HealFirstUnitWithChance(opposingArmy.Units);
+                    healer.HealFirstUnitWithChance(currentArmy.Units);
                 }
             }
 

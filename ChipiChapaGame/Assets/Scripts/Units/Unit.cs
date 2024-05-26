@@ -13,14 +13,7 @@ public class Unit
     public int DodgeChance { get; set; }
 
     private static readonly System.Random random = new();
-    public interface ICloneableUnit
-    {
-        Unit Clone();
-    }
-    public interface IHealableUnit
-    {
-        void Heal(int amount);
-    }
+    
 
     public Unit(string name, int healthPoints, int attackPoints, int defensePoints, int dodgeChance)
     {
@@ -35,7 +28,7 @@ public class Unit
     public void Attack(Unit target)
     {
         PhysicalUnit.PlayAttack();
-        int dodge = (this is LightUnit) ? random.Next(5, 11) : random.Next(0, 6);
+        int dodge = random.Next(1, DodgeChance);
         int damage = Math.Max(0, AttackPoints - target.DefensePoints - dodge);
         target.HealthPoints -= damage;
         FrontManager.Instance.Printer($"{Name} атакует {target.Name} и наносит {damage} урона.");
@@ -50,4 +43,12 @@ public class Unit
     {
         PhysicalUnit.Destroy();
     }
+}
+public interface ICloneableUnit
+{
+    Unit Clone();
+}
+public interface IHealableUnit
+{
+    void Heal(int amount);
 }

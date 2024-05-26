@@ -1,7 +1,7 @@
 ﻿using static Unit;
 public class LightUnit : Unit, ICloneableUnit, IHealableUnit
 {
-    public LightUnit(string name) : base(name, 150, 80, 20, 10) { }
+    public LightUnit(string name) : base(name, 100, 15, 5, 4) { } 
 
     public Unit Clone()
     {
@@ -16,6 +16,6 @@ public class LightUnit : Unit, ICloneableUnit, IHealableUnit
 
     public void Heal(int amount)
     {
-        HealthPoints = System.Math.Min(HealthPoints + amount, base.HealthPoints);
+        HealthPoints = System.Math.Min(HealthPoints + amount, HealthPoints);
     }
 }

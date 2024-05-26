@@ -2,7 +2,7 @@
 
 public class MageUnit : Unit
     {
-    public MageUnit(string name) : base(name, 60, 30, 20, 5) { }
+    public MageUnit(string name) : base(name, 50, 30, 10, 3) { }
 
     public void CloneAdjacentLightUnit(MageUnit mage, List<Unit> units)
         {

@@ -71,6 +71,7 @@ public class BattleGame
     {
         while (Army1.IsAlive() && Army2.IsAlive())
         {
+            
             Army1.MakeMove(Army2);
             // Проверяем, остались ли живые юниты в армии 2 после хода армии 1.
             if (!Army2.IsAlive())
