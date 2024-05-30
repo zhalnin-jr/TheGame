@@ -1,5 +1,4 @@
-﻿
-// Singleton - это паттерн проектирования, который гарантирует, что у класса есть только один экземпляр
+﻿// Singleton - это паттерн проектирования, который гарантирует, что у класса есть только один экземпляр.
 // и предоставляет глобальную точку доступа к этому экземпляру.
 using System.Diagnostics;
 
@@ -10,7 +9,6 @@ public class BattleGame
     private Army initialArmy2;
     private static BattleGame instance;
     private static readonly object lockObj = new object();
-
 
     public Army Army1 { get; set; }
     public Army Army2 { get; set; }
@@ -24,7 +22,7 @@ public class BattleGame
 
     // Instance - предоставляет глобальную точку доступа к единственному экземпляру класса BattleGame. Если экземпляр не создан
     // он создается при первом вызове.
-    public static BattleGame Instance // убрать public конструктор
+    public static BattleGame Instance
     {
         get
         {

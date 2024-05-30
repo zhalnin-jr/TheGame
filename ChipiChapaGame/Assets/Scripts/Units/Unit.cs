@@ -14,7 +14,6 @@ public class Unit
 
     private static readonly System.Random random = new();
     
-
     public Unit(string name, int healthPoints, int attackPoints, int defensePoints, int dodgeChance)
     {
         Name = name;

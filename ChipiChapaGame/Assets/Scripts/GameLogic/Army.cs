@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.UI;
 using static UnitFactories;
-
 public class Army
 {
     private const int LIGHTUNITCOST = 40;
@@ -16,7 +15,6 @@ public class Army
     public string Name { get; set; }
     public List<Unit> Units { get; set; }
 
-    // Вынес сюда
     IUnitFactory lightFactory = new LightUnitFactory();
     IUnitFactory heavyFactory = new HeavyUnitFactory();
     IUnitFactory archerFactory = new ArcherUnitFactory();

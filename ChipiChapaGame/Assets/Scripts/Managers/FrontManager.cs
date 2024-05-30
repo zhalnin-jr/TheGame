@@ -8,7 +8,7 @@ public class FrontManager: MonoBehaviour
     private static FrontManager _instance;
     private static readonly object lockObj = new object();
 
-    // Новое
+    // Новое.
     [SerializeField] private Transform menuCenterParent;
     [SerializeField] private Transform menuBottomParent;
     [SerializeField] private GameObject menuHeader;
