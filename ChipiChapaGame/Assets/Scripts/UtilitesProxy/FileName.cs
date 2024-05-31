@@ -10,29 +10,45 @@ using System.IO;
 
 namespace TheGame.UtilitesProxy
 {
+    /// <summary>
+    /// Интерфейс для звука.
+    /// </summary>
     public interface ISoundProxy
     {
         void PlaySound(string sound);
     }
 
+    /// <summary>
+    /// Логирование атаки.
+    /// </summary>
     public interface IAttackLogProxy
     {
         void LogAttack(Unit attacker, Unit defender);
     }
 
+    /// <summary>
+    /// Логирование спешл абилити.
+    /// </summary>
     public interface ISpecialAbilityLogProxy
     {
         void LogSpecialAbility(string abilityName, Unit unit);
     }
+    
+    /// <summary>
+    /// Воспроизведение звука.
+    /// </summary>
     public class SoundProxy : ISoundProxy
     {
         public void PlaySound(string sound)
         {
             Debug.Log($"Playing sound: {sound}");
-            // Здесь можно добавить код для воспроизведения звука через Unity
+            // Здесь можно добавить код для воспроизведения звука через Unity.
         }
     }
 
+    /// <summary>
+    /// Форма записи лога.
+    /// </summary>
     public class AttackLogProxy : IAttackLogProxy
     {
         public void LogAttack(Unit attacker, Unit defender)
@@ -43,6 +59,9 @@ namespace TheGame.UtilitesProxy
         }
     }
 
+    /// <summary>
+    /// Форма записи лога. 
+    /// </summary>
     public class SpecialAbilityLogProxy : ISpecialAbilityLogProxy
     {
         private string logFilePath = "specialAbilityLog.txt";
@@ -60,7 +79,10 @@ namespace TheGame.UtilitesProxy
         }
     }
 
-public class FileManager
+    /// <summary>
+    /// Запись в файл и считывание.
+    /// </summary>
+    public class FileManager
     {
         public static void WriteToFile(string filePath, string message)
         {
@@ -76,5 +98,4 @@ public class FileManager
             return string.Empty;
         }
     }
-  
 }
