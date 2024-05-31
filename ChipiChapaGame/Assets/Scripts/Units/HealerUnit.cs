@@ -4,10 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Класс Врача.
+/// </summary>
 internal class HealerUnit : Unit
 {
     private static readonly Random random = new Random();
+
+    /// <summary>
+    /// Создание через конструктор с параметрами.
+    /// </summary>
     public HealerUnit(string name) : base(name, 90, 70, 25, 5) {}
+
+    /// <summary>
+    /// Логика работы хилла.
+    /// </summary>
+    /// <param name="units"> - передаем список юнитов.</param>
     public void HealFirstUnitWithChance(List<Unit> units)
     {
         // Генерируем случайное число от 1 до 100.

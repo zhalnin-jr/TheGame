@@ -13,7 +13,9 @@ public class BattleGame
     public Army Army1 { get; set; }
     public Army Army2 { get; set; }
 
-    // Приватный конструктор, который вызывается только внутри класса, что предотвращает создание экземпляров извне.
+    /// <summary>
+    /// Приватный конструктор, который вызывается только внутри класса, что предотвращает создание экземпляров извне.
+    /// </summary>
     private protected BattleGame()
     {
         initialArmy1 = new Army("Левая армия");
@@ -36,7 +38,10 @@ public class BattleGame
             return instance;
         }
     }
-
+    
+    /// <summary>
+    /// Начало создания армии.
+    /// </summary>
     public void StartArmiesCreation()
     {
         PhysicalUnitManager.Instance.currentArmyID = 0;
@@ -44,6 +49,9 @@ public class BattleGame
         initialArmy1.CreateArmy(450, CreateSecondArmy);
     }
 
+    /// <summary>
+    /// Создаём вторую армию.
+    /// </summary>
     public void CreateSecondArmy()
     {
         PhysicalUnitManager.Instance.currentArmyID = 1;
@@ -51,6 +59,9 @@ public class BattleGame
         initialArmy2.CreateArmy(450, FinishArmiesCreation);
     }
 
+    /// <summary>
+    /// Армии созданы.
+    /// </summary>
     public void FinishArmiesCreation()
     {
         FrontManager.Instance.Printer("FINISH");
@@ -65,6 +76,9 @@ public class BattleGame
         GameManager.Instance.ShowFacadeMenu();
     }
 
+    /// <summary>
+    /// Играть до конца.
+    /// </summary>
     public void PlayUntilEnd()
     {
         while (Army1.IsAlive() && Army2.IsAlive())
@@ -106,6 +120,9 @@ public class BattleGame
         }
     }
 
+    /// <summary>
+    /// Очистить армии.
+    /// </summary>
     public void ClearArmies()
     {
         Army1 = null;

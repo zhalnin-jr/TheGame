@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using UnityEngine;
 using static Unit;
 
+/// <summary>
+/// Класс для Лучника.
+/// </summary>
 public class ArcherUnit : Unit, IHealableUnit
 {
     [SerializeField] private GameObject graphicUnit;
@@ -20,13 +23,18 @@ public class ArcherUnit : Unit, IHealableUnit
     // Сохраняет нанесенный урон.
     public int LastDamage { get; private set; }
 
+    /// <summary>
+    /// Создание через конструктор с параметрами.
+    /// </summary>
     public ArcherUnit(string name) : base(name, 100, 15, 5, 1)
     {
         Range = 3;
         RangeDamage = 20;
     }
 
-    // Реализация атаки с ренджом.
+    /// <summary>
+    /// Реализация атаки с рейнджом.
+    /// </summary>
     public void AttackWithRange(List<Unit> enemyUnits)
     {
         // Вычисляем диапазон позиций, в которые может попасть лучник.
@@ -54,6 +62,10 @@ public class ArcherUnit : Unit, IHealableUnit
         }
     }
 
+    /// <summary>
+    /// Может быть вылеченным.
+    /// </summary>
+    /// <param name="amount"> - количество поинтов.</param>
     public void Heal(int amount)
     {
         HealthPoints = Math.Min(HealthPoints + amount, base.HealthPoints);
