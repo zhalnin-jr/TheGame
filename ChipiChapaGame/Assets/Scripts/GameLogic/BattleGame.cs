@@ -55,8 +55,8 @@ public class BattleGame
     {
         FrontManager.Instance.Printer("FINISH");
         // Создаем копии армий для текущего хода.
-        Army1 = new Army("Левой армии");
-        Army2 = new Army("Правой армии");
+        Army1 = new Army("Левая армия");
+        Army2 = new Army("Правая армия");
         // Копируем состояние из начальных армий.
         PhysicalUnitManager.Instance.currentArmyID = 0;
         Army.CopyArmyState(initialArmy1, Army1);

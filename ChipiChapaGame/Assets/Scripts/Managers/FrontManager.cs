@@ -86,5 +86,12 @@ public class FrontManager: MonoBehaviour
             Destroy(child.gameObject);
         }
     }
+    public void ShowProxySelectionMenu(Action selectSoundProxy, Action selectAttackLogProxy, Action selectSpecialAbilityLogProxy)
+    {
+        ClearMenuBlocks();
+        AddMenuBlock("Выбрать Sound Proxy", selectSoundProxy, true);
+        AddMenuBlock("Выбрать Attack Log Proxy", selectAttackLogProxy, true);
+        AddMenuBlock("Выбрать Special Ability Log Proxy", selectSpecialAbilityLogProxy, true);
+    }
 
 }

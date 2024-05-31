@@ -14,7 +14,7 @@ internal class HealerUnit : Unit
         int chance = random.Next(1, 101);
 
         // Проверяем, выпала ли у нас удача с шансом 25%.
-        if (chance <= 50)
+        if (chance <= 30)
         {
                 // Получаем первого юнита из списка.
                 Unit firstUnit = units[0];

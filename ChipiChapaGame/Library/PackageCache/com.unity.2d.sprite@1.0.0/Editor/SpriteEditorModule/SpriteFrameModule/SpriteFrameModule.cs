@@ -268,8 +268,7 @@ namespace UnityEditor.U2D.Sprites
 
             spriteRect.spriteID = GUID.Generate();
 
-            if (!m_RectsCache.Add(spriteRect))
-                return -1;
+            m_RectsCache.Add(spriteRect);
             spriteEditor.SetDataModified();
 
             return m_RectsCache.spriteRects.Count - 1;

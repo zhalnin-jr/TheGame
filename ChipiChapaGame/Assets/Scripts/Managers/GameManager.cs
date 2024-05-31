@@ -1,14 +1,23 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using TMPro;
+using TheGame.UtilitesProxy;
 using UnityEngine;
-public class GameManager: MonoBehaviour
+using UnityEngine.UI;
+using TMPro;
+using System;
+
+public class GameManager : MonoBehaviour
 {
     private GameFacade gameFacade;
     private FrontManager frontManager;
 
     private static GameManager _instance;
     private static readonly object lockObj = new object();
+    private ISoundProxy soundProxy;
+    private IAttackLogProxy attackLogProxy;
+    public IAttackLogProxy AttackLogProxy { get; private set; }
+    private ISpecialAbilityLogProxy specialAbilityLogProxy;
+
+    private bool isProxySelected = false;
 
     public static GameManager Instance
     {
@@ -21,7 +30,7 @@ public class GameManager: MonoBehaviour
                     _instance = FindObjectOfType<GameManager>();
                     if (_instance == null)
                     {
-                        Debug.LogError("There needs to be one active FrontManager script on a GameObject in your scene.");
+                        Debug.LogError("There needs to be one active GameManager script on a GameObject in your scene.");
                     }
                 }
             }
@@ -46,8 +55,50 @@ public class GameManager: MonoBehaviour
     {
         gameFacade = GameFacade.GetInstance();
         frontManager = FrontManager.Instance;
-        ShowFacadeMenu();
 
+        if (!isProxySelected)
+        {
+            frontManager.ShowProxySelectionMenu(SelectSoundProxy, SelectAttackLogProxy, SelectSpecialAbilityLogProxy);
+        }
+        else
+        {
+            InitializeGame();
+        }
+    }
+
+    private void SelectSoundProxy()
+    {
+        soundProxy = new SoundProxy();
+        isProxySelected = true;
+        InitializeGame();
+    }
+
+    private void SelectAttackLogProxy()
+    {
+        attackLogProxy = new AttackLogProxy();
+        isProxySelected = true;
+        InitializeGame();
+    }
+
+    private void SelectSpecialAbilityLogProxy()
+    {
+        specialAbilityLogProxy = new SpecialAbilityLogProxy();
+        isProxySelected = true;
+        InitializeGame();
+    }
+
+    private void InitializeGame()
+    {
+        PreconfigureGame();
+        ShowFacadeMenu();
+    }
+
+    private void PreconfigureGame()
+    {
+        frontManager.ClearMenuBlocks();
+        frontManager.AddMenuBlock("Звук смертей", null, true);
+        frontManager.AddMenuBlock("Логи атак", null, true);
+        frontManager.AddMenuBlock("Логи спешиал", null, true);
     }
 
     public void ShowFacadeMenu()
@@ -56,25 +107,24 @@ public class GameManager: MonoBehaviour
 
         if (gameFacade.GetGameState() == GameFacade.GameState.ArmiesDoesntExist)
         {
-            frontManager.AddMenuBlock($"Создать армию", gameFacade.CreateArmies, true);
+            frontManager.AddMenuBlock("Создать армию", gameFacade.CreateArmies, true);
         }
         else if (gameFacade.GetGameState() == GameFacade.GameState.CanMakeMove)
         {
-            frontManager.AddMenuBlock($"Сделать ход", gameFacade.MakeMove, true);
-            frontManager.AddMenuBlock($"Доиграть до конца", gameFacade.PlayUntilEnd, true);
-            frontManager.AddMenuBlock($"В главное меню", gameFacade.StartNewGame, true);
+            frontManager.AddMenuBlock("Сделать ход", gameFacade.MakeMove, true);
+            frontManager.AddMenuBlock("Доиграть до конца", gameFacade.PlayUntilEnd, true);
+            frontManager.AddMenuBlock("В главное меню", gameFacade.StartNewGame, true);
         }
         if (gameFacade.GetGameState() == GameFacade.GameState.ArmiesDoesntExist)
         {
-            frontManager.AddMenuBlock($"Выйти", Application.Quit, true);
+            frontManager.AddMenuBlock("Выйти", Application.Quit, true);
         }
-
     }
 
     public void ShowNewGameMenu(string armyName)
     {
         frontManager.ClearMenuBlocks();
-        frontManager.AddMenuBlock($"Армия {armyName} победила", null, true);
-        frontManager.AddMenuBlock($"Новая игра", gameFacade.StartNewGame);
+        frontManager.AddMenuBlock($"{armyName} победила", null, true);
+        frontManager.AddMenuBlock("Новая игра", gameFacade.StartNewGame);
     }
 }

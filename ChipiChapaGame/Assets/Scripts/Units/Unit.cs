@@ -35,6 +35,11 @@ public class Unit
             target.DestroyPhysicalUnit();
         }
         FrontManager.Instance.Printer($"{Name} атакует {target.Name} и наносит {damage} урона.");
+
+        if (GameManager.Instance.AttackLogProxy != null)
+        {
+            GameManager.Instance.AttackLogProxy.LogAttack(this, target);
+        }
     }
 
     public bool IsAlive()
