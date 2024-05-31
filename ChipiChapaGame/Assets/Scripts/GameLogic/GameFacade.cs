@@ -4,19 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Отвечает за реализацию паттерна Фасад (объединение методов).
+/// </summary>
 public class GameFacade
 {
     private static GameFacade instance;
     private static readonly object lockObject = new object();
     private readonly BattleGame game;
 
-    // Приватный конструктор для Singleton.
+    /// <summary>
+    /// Приватный конструктор для синглтона.
+    /// </summary>
     private GameFacade()
     {
         game = BattleGame.Instance;
     }
 
-    // Метод для получения экземпляра GameFacade (реализация Singleton).
+    /// <summary>
+    /// Метод для получения экземпляра GameFacade (реализация Singleton).
+    /// </summary>
     public static GameFacade GetInstance()
     {
         if (instance == null)
@@ -29,17 +36,25 @@ public class GameFacade
         return instance;
     }
 
-    // Методы для управления игрой.
+    /// <summary>
+    /// Создание армии (здесь и ниже - методы для управления игрой).
+    /// </summary>
     public void CreateArmies()
     {
         game.StartArmiesCreation();
     }
 
+    /// <summary>
+    /// Доиграть до конца.
+    /// </summary>
     public void PlayUntilEnd()
     {
         game.PlayUntilEnd();
     }
-
+    
+    /// <summary>
+    /// Сделать ход.
+    /// </summary>
     public void MakeMove()
     {
         game.Army1.MakeMove(game.Army2);
@@ -49,6 +64,9 @@ public class GameFacade
         game.Army2.DisplayArmy();
     }
 
+    /// <summary>
+    /// Действия при начале новой игры.
+    /// </summary>
     public void StartNewGame()
     {
         game.ClearArmies();
@@ -56,6 +74,9 @@ public class GameFacade
         GameManager.Instance.ShowFacadeMenu();
     }
 
+    /// <summary>
+    /// Выбор состояния игры.
+    /// </summary>
     public GameState GetGameState()
     {
         if (game.Army2 == null)
@@ -72,6 +93,9 @@ public class GameFacade
         }
     }
 
+    /// <summary>
+    /// Состояние игрц - армии не существует, сделать ход, игра окончена.
+    /// </summary>
     public enum GameState
     { 
         ArmiesDoesntExist,
