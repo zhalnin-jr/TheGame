@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine.UI;
 using static UnitFactories;
 
@@ -51,7 +52,7 @@ public class Army
     /// <summary>
     /// При создании лёгкого вычитаем из общей суммы его поинты.
     /// </summary>
-    public void AddLightUnit() 
+    public void AddLightUnit()
     {
         points -= LIGHTUNITCOST;
         AddUnit(lightFactory, $"L{Units.Count + 1}");
@@ -69,7 +70,7 @@ public class Army
     /// <summary>
     /// При создании лучника вычитаем из суммы его поинты.
     /// </summary>
-    public void AddArcherUnit() 
+    public void AddArcherUnit()
     {
         points -= ARCHERUNITCOST;
         AddUnit(archerFactory, $"A{Units.Count + 1}");
@@ -87,7 +88,7 @@ public class Army
     /// <summary>
     /// При создании врача вычитаем из суммы его поинты.
     /// </summary>
-    public void AddHealerUnit() 
+    public void AddHealerUnit()
     {
         points -= HEALERUNITCOST;
         AddUnit(healerFactory, $"C{Units.Count + 1}");
@@ -115,6 +116,7 @@ public class Army
 
         ArmyCreation();
     }
+
 
     /// <summary>
     /// Текст кнопок при добавлении юнитов в армию.
@@ -178,18 +180,16 @@ public class Army
     /// Сделать ход.
     /// </summary>
     /// <param name="enemyArmy"> - армия оппонента.</param>
-    public void MakeMove(Army currentArm, Army enemyArmy)
+    public void MakeMove(Army currentArmy, Army enemyArmy)
 
     {
         List<Unit> unitsToAdd = new List<Unit>();
-        Army currentArmy = currentArm;
-        Army opposingArmy = enemyArmy;
-        if (currentArmy.Units.Count == 0 || opposingArmy.Units.Count == 0)
+        if (currentArmy.Units.Count == 0 || enemyArmy.Units.Count == 0)
         {
-            FrontManager.Instance.Printer($"{(currentArmy.Units.Count == 0 ? currentArmy.Name : opposingArmy.Name)} проиграла, так как не осталось юнитов для боя.");
+            FrontManager.Instance.Printer($"{(currentArmy.Units.Count == 0 ? currentArmy.Name : enemyArmy.Name)} проиграла, так как не осталось юнитов для боя.");
             return;
         }
-        
+
         Unit attacker = Units[0];
         Unit defender = enemyArmy.Units[0];
 
@@ -201,18 +201,19 @@ public class Army
                 FrontManager.Instance.Printer($"{unit.HealthPoints}");
                 if (unit.IsAlive() && currentArmy.Units.IndexOf(unit) == 0)
                 {
-                    unit.Attack(opposingArmy.Units[0]);
+                    unit.Attack(enemyArmy.Units[0]);
+
 
                     // Проверяем, умер ли противник после атаки.
-                    if (!opposingArmy.Units[0].IsAlive())
+                    if (!enemyArmy.Units[0].IsAlive())
                     {
-                        FrontManager.Instance.Printer($"Пехотинец {opposingArmy.Units[0].Name} умер.");
+                        FrontManager.Instance.Printer($"Пехотинец {enemyArmy.Units[0].Name} умер.");
                         break;
                     }
                 }
                 else if (unit is ArcherUnit archer)
                 {
-                    archer.AttackWithRange(opposingArmy.Units);
+                    archer.AttackWithRange(enemyArmy.Units);
                 }
                 else if (unit is MageUnit mage)
                 {
@@ -228,28 +229,29 @@ public class Army
                     healer.HealFirstUnitWithChance(currentArmy.Units);
                 }
             }
-            
+
             unitsToAdd.Clear(); // Очищаем список unitsToAdd после добавления юнитов
             // Удаление погибших юнитов после хода текущей армии.
             currentArmy.Units.RemoveAll(unit => !unit.IsAlive());
-            opposingArmy.Units.RemoveAll(unit => !unit.IsAlive());
+            enemyArmy.Units.RemoveAll(unit => !unit.IsAlive());
 
             // Меняем местами армии.
             var temp = currentArmy;
-            currentArmy = opposingArmy;
-            opposingArmy = temp;
+            currentArmy = enemyArmy;
+            enemyArmy = temp;
         }
 
         if (!currentArmy.IsAlive())
         {
-            FrontManager.Instance.Printer($"{opposingArmy.Name} победила!");
-            GameManager.Instance.ShowNewGameMenu(opposingArmy.Name);
+            FrontManager.Instance.Printer($"{enemyArmy.Name} победила!");
+            GameManager.Instance.ShowNewGameMenu(enemyArmy.Name);
         }
-        else if (!opposingArmy.IsAlive())
+        else if (!enemyArmy.IsAlive())
         {
             FrontManager.Instance.Printer($"{currentArmy.Name} победила!");
             GameManager.Instance.ShowNewGameMenu(currentArmy.Name);
         }
+
     }
 
     /// <summary>
