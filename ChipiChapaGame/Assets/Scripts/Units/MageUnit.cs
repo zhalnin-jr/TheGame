@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 public class MageUnit : Unit
 {
-    public MageUnit(string name) : base(name, 50, 30, 10, 3) { }
     private static readonly Random random = new Random();
-    public void CloneAdjacentLightUnit(MageUnit mage, List<Unit> units)
+
+    public MageUnit(string name) : base(name, 50, 30, 10, 3) { }
+
+    public Unit CloneAdjacentLightUnit(List<Unit> units)
     {
         int chance = random.Next(1, 101);
 
-        // Проверяем, выпала ли у нас удача с шансом 25%.
+        // Проверяем, выпала ли у нас удача с шансом 20%.
         if (chance <= 20)
         {
-            int mageIndex = units.IndexOf(mage);
+            int mageIndex = units.IndexOf(this);
             Unit unitToClone = null;
 
             if (mageIndex > 0 && units[mageIndex - 1] is LightUnit leftUnit)
@@ -26,9 +28,11 @@ public class MageUnit : Unit
             if (unitToClone != null && unitToClone is ICloneableUnit cloneable)
             {
                 var clonedUnit = cloneable.Clone();
-                units.Insert(mageIndex, clonedUnit);
-                FrontManager.Instance.Printer($"Маг {mage.Name} клонировал {clonedUnit.Name} перед собой.");
+                FrontManager.Instance.Printer($"Маг {this.Name} клонировал {clonedUnit.Name} перед собой.");
+                return clonedUnit;
             }
         }
+
+        return null; // Если клонирование не произошло, возвращаем null.
     }
 }

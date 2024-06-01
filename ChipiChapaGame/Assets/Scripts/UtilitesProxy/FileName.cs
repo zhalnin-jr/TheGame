@@ -30,6 +30,24 @@ namespace TheGame.UtilitesProxy
         {
             Debug.Log($"Playing sound: {sound}");
             // Здесь можно добавить код для воспроизведения звука через Unity
+            // Например, используя AudioSource:
+            AudioSource audioSource = GameObject.FindObjectOfType<AudioSource>();
+            if (audioSource != null)
+            {
+                AudioClip clip = Resources.Load<AudioClip>(sound);
+                if (clip != null)
+                {
+                    audioSource.PlayOneShot(clip);
+                }
+                else
+                {
+                    Debug.LogError($"Audio clip not found: {sound}");
+                }
+            }
+            else
+            {
+                Debug.LogError("AudioSource not found in the scene.");
+            }
         }
     }
 

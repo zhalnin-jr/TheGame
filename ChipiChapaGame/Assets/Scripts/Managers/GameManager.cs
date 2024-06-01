@@ -9,6 +9,9 @@ public class GameManager : MonoBehaviour
 {
     private GameFacade gameFacade;
     private FrontManager frontManager;
+    public bool EnableSoundDeath { get; set; }
+    public bool EnableAttackLogs { get; set; }
+    public bool EnableSpecialLogs { get; set; }
 
     private static GameManager _instance;
     private static readonly object lockObj = new object();
@@ -89,18 +92,10 @@ public class GameManager : MonoBehaviour
 
     private void InitializeGame()
     {
-        PreconfigureGame();
         ShowFacadeMenu();
     }
 
-    private void PreconfigureGame()
-    {
-        frontManager.ClearMenuBlocks();
-        frontManager.AddMenuBlock("Звук смертей", null, true);
-        frontManager.AddMenuBlock("Логи атак", null, true);
-        frontManager.AddMenuBlock("Логи спешиал", null, true);
-    }
-
+   
     public void ShowFacadeMenu()
     {
         frontManager.ClearMenuBlocks();
@@ -128,3 +123,4 @@ public class GameManager : MonoBehaviour
         frontManager.AddMenuBlock("Новая игра", gameFacade.StartNewGame);
     }
 }
+

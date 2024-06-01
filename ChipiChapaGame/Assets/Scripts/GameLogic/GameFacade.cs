@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheGame.UtilitesProxy;
 
 public class GameFacade
 {
@@ -42,9 +43,9 @@ public class GameFacade
 
     public void MakeMove()
     {
-        game.Army1.MakeMove(game.Army2);
+        game.Army1.MakeMove(game.Army1, game.Army2);
         FrontManager.Instance.Printer("");
-        game.Army1.DisplayArmy();
+        game.Army1.DisplayArmy();   
         FrontManager.Instance.Printer("");
         game.Army2.DisplayArmy();
     }
@@ -71,7 +72,6 @@ public class GameFacade
             return GameState.GameFinished;
         }
     }
-
     public enum GameState
     { 
         ArmiesDoesntExist,

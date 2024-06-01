@@ -132,9 +132,11 @@ public class Army
         FrontManager.Instance.Printer(armyRepresentation);
     }
 
-    public void MakeMove(Army enemyArmy)
+    public void MakeMove(Army currentArm, Army enemyArmy)
+
     {
-        Army currentArmy = this;
+        List<Unit> unitsToAdd = new List<Unit>();
+        Army currentArmy = currentArm;
         Army opposingArmy = enemyArmy;
         if (currentArmy.Units.Count == 0 || opposingArmy.Units.Count == 0)
         {
@@ -168,14 +170,19 @@ public class Army
                 }
                 else if (unit is MageUnit mage)
                 {
-                    mage.CloneAdjacentLightUnit(mage, currentArmy.Units);
+                    Unit clonedUnit = mage.CloneAdjacentLightUnit(currentArmy.Units);
+                    if (clonedUnit != null)
+                    {
+                        currentArmy.Units.Insert(currentArmy.Units.IndexOf(mage), clonedUnit); // Вставляем клонированного юнита рядом с магом
+                    }
                 }
                 else if (unit is HealerUnit healer)
                 {
                     healer.HealFirstUnitWithChance(currentArmy.Units);
                 }
             }
-
+            
+            unitsToAdd.Clear(); // Очищаем список unitsToAdd после добавления юнитов
             // Удаление погибших юнитов после хода текущей армии.
             currentArmy.Units.RemoveAll(unit => !unit.IsAlive());
             opposingArmy.Units.RemoveAll(unit => !unit.IsAlive());

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 internal class HealerUnit : Unit
 {
     private static readonly Random random = new Random();
-    public HealerUnit(string name) : base(name, 90, 70, 25, 5) {}
+    public HealerUnit(string name) : base(name, 30, 20, 10, 3) { }
     public void HealFirstUnitWithChance(List<Unit> units)
     {
         // Генерируем случайное число от 1 до 100.
@@ -23,7 +23,7 @@ internal class HealerUnit : Unit
                 if (firstUnit is IHealableUnit healableUnit)
                 {
                     // Увеличиваем количество ХР у первого юнита.
-                    healableUnit.Heal(20);
+                    healableUnit.Heal(10);
 
                     FrontManager.Instance.Printer($"Лечитель {Name} исцелил юнита {firstUnit.Name}.");
                 }

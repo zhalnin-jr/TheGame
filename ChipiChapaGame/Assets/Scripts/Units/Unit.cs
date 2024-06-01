@@ -1,11 +1,12 @@
 ﻿using System;
+using TheGame.UtilitesProxy;
 using UnityEditor;
 using UnityEngine;
 
 public class Unit
 {
     private PhysicalUnit PhysicalUnit;
-
+    private static readonly ISoundProxy soundProxy = new SoundProxy();
     public string Name { get; set; }
     public int HealthPoints { get; set; }
     public int AttackPoints { get; set; }
@@ -49,6 +50,7 @@ public class Unit
 
     public void DestroyPhysicalUnit()
     {
+        soundProxy.PlaySound("mujskoy-vopl-posle-raneniya"); // Убедитесь, что у вас есть соответствующий аудиофайл в Resources
         PhysicalUnit.Destroy();
     }
 }
