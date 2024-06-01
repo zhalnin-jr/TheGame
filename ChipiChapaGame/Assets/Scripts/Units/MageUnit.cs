@@ -21,8 +21,8 @@ public class MageUnit : Unit
     {
         int chance = random.Next(1, 101);
 
-        // Проверяем, выпала ли у нас удача с шансом 20%.
-        if (chance <= 20)
+        // Проверяем, выпала ли у нас удача с шансом 5%.
+        if (chance < 5)
         {
             int mageIndex = units.IndexOf(this);
             Unit unitToClone = null;
