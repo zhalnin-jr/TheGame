@@ -8,7 +8,7 @@ public class HeavyUnit : Unit, IHealableUnit
     /// <summary>
     /// Создание через конструктор с параметрами.
     /// </summary>
-    public HeavyUnit(string name) : base(name, 200, 10, 10, 2) { }
+    public HeavyUnit(string name) : base(name, 100, 30, 10, 2) { }
 
     /// <summary>
     /// Мржет быть вылеченным.
