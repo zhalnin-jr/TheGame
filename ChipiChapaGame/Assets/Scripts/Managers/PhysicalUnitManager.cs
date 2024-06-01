@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Отвечает за скрикпты ударов, анимации.
+/// </summary>
 public class PhysicalUnitManager : MonoBehaviour
 {
     [SerializeField] private PhysicalUnit lightUnitPrefab;
@@ -20,6 +23,9 @@ public class PhysicalUnitManager : MonoBehaviour
 
     public int currentArmyID = 0;
 
+    /// <summary>
+    /// Только единичная инициализация.
+    /// </summary>
     public static PhysicalUnitManager Instance
     {
         get
@@ -39,6 +45,9 @@ public class PhysicalUnitManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Удаление объектов (для Unity).
+    /// </summary>
     private void Awake()
     {
         if (_instance == null)
@@ -51,6 +60,12 @@ public class PhysicalUnitManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    /// <summary>
+    /// Выбор модельки юнита.
+    /// </summary>
+    /// <param name="target"></param>
+    /// <returns></returns>
     public PhysicalUnit GetPhysicalUnit(Unit target)
     {
         PhysicalUnit newPrefab;
@@ -74,12 +89,13 @@ public class PhysicalUnitManager : MonoBehaviour
         {
             newPrefab = mageUnitPrefab;
         }
-
-
         if (currentArmyID == 0) return Instantiate(newPrefab, armyParent1);
         else return Instantiate(newPrefab, armyParent2);
     }
 
+    /// <summary>
+    /// Чистим поле.
+    /// </summary>
     public void ClearAllPhysicalUnits()
     {
         foreach (Transform child in armyParent1.transform)

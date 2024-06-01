@@ -5,6 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.UI;
 using static UnitFactories;
+
+/// <summary>
+/// Отвечает за армию.
+/// </summary>
 public class Army
 {
     private const int LIGHTUNITCOST = 40;
@@ -21,7 +25,6 @@ public class Army
     IUnitFactory magaFactory = new MageUnitFactory();
     IUnitFactory healerFactory = new HealerUnitFactory();
 
-    // Новое
     private int points;
     private Action finishAction = null;
 
@@ -30,6 +33,12 @@ public class Army
         Name = name;
         Units = new List<Unit>();
     }
+
+    /// <summary>
+    /// Добавление юнита в армию при создании.
+    /// </summary>
+    /// <param name="factory"> - наша фабрика. </param>
+    /// <param name="name"> - выбранный юнит. </param>
     public void AddUnit(UnitFactories.IUnitFactory factory, string name)
     {
         var unit = factory.CreateUnit(name);
@@ -39,38 +48,64 @@ public class Army
         ArmyCreation();
     }
 
+    /// <summary>
+    /// При создании лёгкого вычитаем из общей суммы его поинты.
+    /// </summary>
     public void AddLightUnit() 
     {
         points -= LIGHTUNITCOST;
         AddUnit(lightFactory, $"L{Units.Count + 1}");
-    } 
+    }
+
+    /// <summary>
+    /// При создании тяжёлого вычитаем из общей суммы его поинты.
+    /// </summary>
     public void AddHeavyUnit()
     {
         points -= HEAVYUNITCOST;
         AddUnit(heavyFactory, $"H{Units.Count + 1}");
     }
 
+    /// <summary>
+    /// При создании лучника вычитаем из суммы его поинты.
+    /// </summary>
     public void AddArcherUnit() 
     {
         points -= ARCHERUNITCOST;
         AddUnit(archerFactory, $"A{Units.Count + 1}");
-    } 
+    }
+
+    /// <summary>
+    /// При создании мага вычитаем из суммы его поинты.
+    /// </summary>
     public void AddMageUnit()
     {
         points -= MAGEUNITCOST;
         AddUnit(magaFactory, $"M{Units.Count + 1}");
     }
+
+    /// <summary>
+    /// При создании врача вычитаем из суммы его поинты.
+    /// </summary>
     public void AddHealerUnit() 
     {
         points -= HEALERUNITCOST;
         AddUnit(healerFactory, $"C{Units.Count + 1}");
-    } 
+    }
+
+    /// <summary>
+    /// Чистим меню, когда армии созданы.
+    /// </summary>
     public void FinishCreation()
     {
         FrontManager.Instance.ClearMenuBlocks();
         finishAction?.Invoke();
     }
 
+    /// <summary>
+    /// Для создания армии.
+    /// </summary>
+    /// <param name="nextArmyCreation"> - переходим к созданию следующей армии.</param>
     public void CreateArmy(int _points, Action nextArmyCreation)
     {
         points = _points;
@@ -81,8 +116,12 @@ public class Army
         ArmyCreation();
     }
 
+    /// <summary>
+    /// Текст кнопок при добавлении юнитов в армию.
+    /// </summary>
     public void ArmyCreation()
     {
+        // Минимальная стоимость юнита.
         FrontManager.Instance.ClearMenuBlocks();
         if (points >= 40)
         {
@@ -101,6 +140,9 @@ public class Army
         }
     }
 
+    /// <summary>
+    /// Отображение армии (в консоли).
+    /// </summary>
     public void DisplayArmy()
     {
         FrontManager.Instance.Printer($"Армия {Name}:");
@@ -132,6 +174,10 @@ public class Army
         FrontManager.Instance.Printer(armyRepresentation);
     }
 
+    /// <summary>
+    /// Сделать ход.
+    /// </summary>
+    /// <param name="enemyArmy"> - армия оппонента.</param>
     public void MakeMove(Army currentArm, Army enemyArmy)
 
     {
@@ -171,9 +217,10 @@ public class Army
                 else if (unit is MageUnit mage)
                 {
                     Unit clonedUnit = mage.CloneAdjacentLightUnit(currentArmy.Units);
+                    // Вставляем клонированного юнита рядом с магом.
                     if (clonedUnit != null)
                     {
-                        currentArmy.Units.Insert(currentArmy.Units.IndexOf(mage), clonedUnit); // Вставляем клонированного юнита рядом с магом
+                        currentArmy.Units.Insert(currentArmy.Units.IndexOf(mage), clonedUnit);
                     }
                 }
                 else if (unit is HealerUnit healer)
@@ -205,6 +252,10 @@ public class Army
         }
     }
 
+    /// <summary>
+    /// Проверка на живость.
+    /// </summary>
+    /// <returns></returns>
     public bool IsAlive()
     {
         return Units.Any(unit => unit.IsAlive());
@@ -216,7 +267,11 @@ public class Army
     private bool CanAddMageUnit() => points >= MAGEUNITCOST;
     private bool CanAddHealerUnit() => points >= HEALERUNITCOST;
 
-
+    /// <summary>
+    /// Сохраняем состояние армии.
+    /// </summary>
+    /// <param name="source"> - значение начальное армии.</param>
+    /// <param name="destination"> - значение конечное.</param>
     public static void CopyArmyState(Army source, Army destination)
     {
         // Очищаем армию назначения перед копированием.

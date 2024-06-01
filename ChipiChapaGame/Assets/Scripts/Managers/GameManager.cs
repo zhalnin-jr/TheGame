@@ -5,6 +5,9 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
+/// <summary>
+/// MonoBehavior - базовый класс для корректной работы с Unity.
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     private GameFacade gameFacade;
@@ -22,6 +25,9 @@ public class GameManager : MonoBehaviour
 
     private bool isProxySelected = false;
 
+    /// <summary>
+    /// Единственная инициализация игры.
+    /// </summary>
     public static GameManager Instance
     {
         get
@@ -41,6 +47,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Удаление объектов.
+    /// </summary>
     private void Awake()
     {
         if (_instance == null)
@@ -54,6 +63,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Точка запуска игры.
+    /// </summary>
     private void Start()
     {
         gameFacade = GameFacade.GetInstance();
@@ -69,6 +81,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Действие при нажматии пользователем кнопки с прокси по звуку.
+    /// </summary>
     private void SelectSoundProxy()
     {
         soundProxy = new SoundProxy();
@@ -76,6 +91,9 @@ public class GameManager : MonoBehaviour
         InitializeGame();
     }
 
+    /// <summary>
+    /// Действие при нажатии пользователем кнопки с прокси по логированию атаки.
+    /// </summary>
     private void SelectAttackLogProxy()
     {
         attackLogProxy = new AttackLogProxy();
@@ -83,6 +101,9 @@ public class GameManager : MonoBehaviour
         InitializeGame();
     }
 
+    /// <summary>
+    /// Действие при нажматии пользователем кнопки с прокси по логированию спешл абилити.
+    /// </summary>
     private void SelectSpecialAbilityLogProxy()
     {
         specialAbilityLogProxy = new SpecialAbilityLogProxy();
@@ -90,12 +111,17 @@ public class GameManager : MonoBehaviour
         InitializeGame();
     }
 
+    /// <summary>
+    /// Запуск игры.
+    /// </summary>
     private void InitializeGame()
     {
         ShowFacadeMenu();
     }
 
-   
+    /// <summary>
+    /// Отвечает за меню.
+    /// </summary>
     public void ShowFacadeMenu()
     {
         frontManager.ClearMenuBlocks();
@@ -116,6 +142,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Меню при окончании игры.
+    /// </summary>
+    /// <param name="armyName"> - название победившей армии. </param>
     public void ShowNewGameMenu(string armyName)
     {
         frontManager.ClearMenuBlocks();

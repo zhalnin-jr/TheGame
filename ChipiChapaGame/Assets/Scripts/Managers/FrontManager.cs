@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
+/// <summary>
+/// Отвечает за UI в игре. MonoBehavior - базовый класс для корректной работы с Unity.
+/// </summary>
 public class FrontManager: MonoBehaviour
 {
     private static FrontManager _instance;
@@ -14,6 +17,9 @@ public class FrontManager: MonoBehaviour
     [SerializeField] private GameObject menuHeader;
     [SerializeField] private GameObject buttonMenu;
 
+    /// <summary>
+    /// Единственная инициализация скриптов на сцене.
+    /// </summary>
     public static FrontManager Instance
     {
         get
@@ -33,6 +39,9 @@ public class FrontManager: MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Удаление объектов.
+    /// </summary>
     private void Awake()
     {
         if (_instance == null)
@@ -46,16 +55,29 @@ public class FrontManager: MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Объявление.
+    /// </summary>
     private protected FrontManager()
     {
     }
 
+    /// <summary>
+    /// Функция для вывода логов.
+    /// </summary>
+    /// <param name="output"> - информация, которая выводится. </param>
     public void Printer(string output)
     {
         Debug.Log(output);
         //Console.WriteLine(output);
     }
 
+    /// <summary>
+    /// Конструктор для создания кнопок.
+    /// </summary>
+    /// <param name="_buttonText"> - определение текста внутри кнопки. </param>
+    /// <param name="_onClick"> - возможность кликать. </param>
+    /// <param name="bottom"> - положение кнопок. </param>
     public void AddMenuBlock(string _buttonText, Action _onClick = null, bool bottom = false)
     {
         GameObject newBlock;
@@ -75,6 +97,9 @@ public class FrontManager: MonoBehaviour
         newBlock.GetComponentInChildren<TMP_Text>().text = _buttonText;
     }
 
+    /// <summary>
+    /// Очищение ячейки списка.
+    /// </summary>
     public void ClearMenuBlocks()
     {
         foreach (Transform child in menuCenterParent.transform)
@@ -86,6 +111,13 @@ public class FrontManager: MonoBehaviour
             Destroy(child.gameObject);
         }
     }
+
+    /// <summary>
+    /// Показываем меню по прокси.
+    /// </summary>
+    /// <param name="selectSoundProxy"> - прокси по добавлению звука смерти. </param>
+    /// <param name="selectAttackLogProxy"> - прокси по логированию атак. </param>
+    /// <param name="selectSpecialAbilityLogProxy"> - прокси по логированию спешл абилити.</param>
     public void ShowProxySelectionMenu(Action selectSoundProxy, Action selectAttackLogProxy, Action selectSpecialAbilityLogProxy)
     {
         ClearMenuBlocks();
@@ -93,5 +125,4 @@ public class FrontManager: MonoBehaviour
         AddMenuBlock("Выбрать Attack Log Proxy", selectAttackLogProxy, true);
         AddMenuBlock("Выбрать Special Ability Log Proxy", selectSpecialAbilityLogProxy, true);
     }
-
 }
